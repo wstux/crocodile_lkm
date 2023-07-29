@@ -21,17 +21,24 @@
 #include <linux/module.h>
 #include <linux/syscalls.h>
 
+#include "logging/logger.h"
+
 /*
  * @brief   Module cleanup.
  */
 static void cleanup_module_hsyst(void)
-{}
+{
+    KLOG_INFO(LOG_PREFIX "cleanup_module\n");
+}
 
 /*
  * @brief   Module initialization.
  */
 static int __init init_module_hsyst(void)
 {
+    INIT_KLOGGER(LVL_WARN);
+    KLOG_INFO(LOG_PREFIX "init_module\n");
+
     return 0;
 }
 
