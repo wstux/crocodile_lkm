@@ -16,37 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <linux/cdev.h>
-#include <linux/kernel.h>
-#include <linux/module.h>
-#include <linux/syscalls.h>
+#ifndef _CROCODILE_LKM_LOGGING_LOG_IMPL_H_
+#define _CROCODILE_LKM_LOGGING_LOG_IMPL_H_
 
-#include "logging/logger.h"
+#include "logging/details/severity_level_impl.h"
 
-/*
- * @brief   Module cleanup.
- */
-static void cleanup_module_hsyst(void)
-{
-    KLOG_INFO(LOG_PREFIX "cleanup_module\n");
-}
+#define _PLOG_IMPL(logger, level, fmt, ...) \
+    logger(_LOG_LEVEL(level) fmt __VA_OPT__(,) __VA_ARGS__)
 
-/*
- * @brief   Module initialization.
- */
-static int __init init_module_hsyst(void)
-{
-    INIT_KLOGGER(LVL_WARN);
-    KLOG_INFO(LOG_PREFIX "init_module\n");
+#define _PLOG(logger, level, fmt, ...) \
+    do { \
+        if (! _PLOGGER_CAN_LOG(logger, level)) { \
+            break; \
+        } \
+        _PLOG_IMPL(logger, level, fmt, __VA_ARGS__); \
+    } \
+    while (0)
 
-    return 0;
-}
-
-module_init(init_module_hsyst);
-module_exit(cleanup_module_hsyst);
-
-MODULE_LICENSE("GPL");
-MODULE_AUTHOR("Chistyakov Alexander");
-MODULE_DESCRIPTION("Some description...");
-MODULE_VERSION("0.0.1");
+#endif /* _CROCODILE_LKM_LOGGING_LOG_IMPL_H_ */
 

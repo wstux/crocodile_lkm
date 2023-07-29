@@ -16,37 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <linux/cdev.h>
-#include <linux/kernel.h>
-#include <linux/module.h>
-#include <linux/syscalls.h>
+#include "logging/severity_level.h"
+#include "logging/details/severity_level_impl.h"
 
-#include "logging/logger.h"
+#define _LVL_COUNT  LVL_DEBUG + 1
 
-/*
- * @brief   Module cleanup.
- */
-static void cleanup_module_hsyst(void)
+/* Default severity level. */
+static int _severity_level = LVL_WARN;
+
+int _can_log(int lvl)
 {
-    KLOG_INFO(LOG_PREFIX "cleanup_module\n");
+    return (lvl >= _severity_level);
 }
 
-/*
- * @brief   Module initialization.
- */
-static int __init init_module_hsyst(void)
+int _init_logger(int lvl)
 {
-    INIT_KLOGGER(LVL_WARN);
-    KLOG_INFO(LOG_PREFIX "init_module\n");
-
+    if ((lvl < 0) || (lvl > _LVL_COUNT)) {
+        return -1;
+    }
+    _severity_level = lvl;
     return 0;
 }
 
-module_init(init_module_hsyst);
-module_exit(cleanup_module_hsyst);
-
-MODULE_LICENSE("GPL");
-MODULE_AUTHOR("Chistyakov Alexander");
-MODULE_DESCRIPTION("Some description...");
-MODULE_VERSION("0.0.1");
+#undef _LVL_COUNT
 
