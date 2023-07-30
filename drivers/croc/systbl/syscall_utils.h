@@ -31,9 +31,16 @@ long init_syscall_table(void);
  * @brief   Replacement system call a custom function.
  * @param   hook_syscall_fn - custom function.
  * @param   syscall_num - system call number.
+ * @return  On success, 0 is returned. On failure, -1 is returned.
+ */
+long hook_syscall(sys_call_fn_t hook_syscall_fn, int syscall_num);
+
+/*
+ * @brief   Get original system call function.
+ * @param   syscall_num - system call number.
  * @return  On success, original system call is returned. On failure, NULL is returned.
  */
-sys_call_fn_t hook_syscall(sys_call_fn_t hook_syscall_fn, int syscall_num);
+sys_call_fn_t orig_syscall(int syscall_num);
 
 /*
  * @brief   Restore the original system call.

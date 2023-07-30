@@ -71,13 +71,13 @@ long init_syscall_table(void)
 /*
  * @details To write.
  */
-sys_call_fn_t hook_syscall(sys_call_fn_t hook_syscall_fn, int syscall_num)
+long hook_syscall(sys_call_fn_t hook_syscall_fn, int syscall_num)
 {
     if (! _p_sys_call_table) {
-        return NULL;
+        return -1;
     }
-    if (syscall_num >= NR_syscalls) {
-        return NULL;
+    if ((syscall_num < 0) || (syscall_num >= NR_syscalls)) {
+        return -1;
     }
 
     if (! _orig_syscall_table[syscall_num]) {
@@ -85,7 +85,7 @@ sys_call_fn_t hook_syscall(sys_call_fn_t hook_syscall_fn, int syscall_num)
     }
 
     UNSAFE_CALL(_p_sys_call_table[syscall_num] = (unsigned long)hook_syscall_fn);
-    return _orig_syscall_table[syscall_num];
+    return 0;
 }
 
 /*
@@ -96,7 +96,7 @@ sys_call_fn_t orig_syscall(int syscall_num)
     if (! _p_sys_call_table) {
         return NULL;
     }
-    if (syscall_num >= NR_syscalls) {
+    if ((syscall_num < 0) || (syscall_num >= NR_syscalls)) {
         return NULL;
     }
 
@@ -115,7 +115,7 @@ long restore_orig_syscall(int syscall_num)
     if (! _p_sys_call_table) {
         return -1;
     }
-    if (syscall_num >= NR_syscalls) {
+    if ((syscall_num < 0) || (syscall_num >= NR_syscalls)) {
         return -1;
     }
     if (! _orig_syscall_table[syscall_num]) {
