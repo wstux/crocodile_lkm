@@ -1,14 +1,11 @@
 # crocodile_lkm
-=======================
 
 Hack_syscall_tbl is a LKM rootkit for Linux Kernels 4.x(>=4.4.0)/5.x
 
 ## Features
---
 - to write;
 
 ## Install
---
 Compile
 ```
 make
@@ -19,14 +16,12 @@ insmod build_release/drivers/croc/croc.ko
 ```
 
 ## Uninstall
---
 Remove the module(as root)
 ```
 rmmod croc
 ```
 
 ## References
---
 1. [Wikipedia Rootkit](https://en.wikipedia.org/wiki/Rootkit)
 2. [Linux Device Drivers](http://lwn.net/Kernel/LDD3/)
 3. [LKM HACKING](https://web.archive.org/web/20140701183221/https://www.thc.org/papers/LKM_HACKING.html)
