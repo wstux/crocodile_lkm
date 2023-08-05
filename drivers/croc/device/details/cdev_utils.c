@@ -22,7 +22,7 @@
 void cdev_setup(module_dev_t* p_dev, int major, int minor, int idx, 
                 struct file_operations* p_fops)
 {
-    rc_t err;
+    int err;
     int devno = MKDEV(major, minor + idx);
 
     cdev_init(&p_dev->cdev, p_fops);
@@ -35,7 +35,7 @@ void cdev_setup(module_dev_t* p_dev, int major, int minor, int idx,
     }
 }
 
-rc_t cdev_trim(module_dev_t* p_dev)
+int cdev_trim(module_dev_t* p_dev)
 {
     /* Do nothing now. */
     return 0;

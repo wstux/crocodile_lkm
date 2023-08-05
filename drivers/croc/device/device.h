@@ -19,11 +19,11 @@
 #ifndef _CROCODILE_LKM_DEVICE_DEVICE_H_
 #define _CROCODILE_LKM_DEVICE_DEVICE_H_
 
-#include "types.h"
+#include "device/types.h"
 
-rc_t deregister_device(void);
+int deregister_device(void);
 
-rc_t register_device(void);
+int register_device(void);
 
 #endif /* _CROCODILE_LKM_DEVICE_DEVICE_H_ */
 

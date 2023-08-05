@@ -41,7 +41,7 @@ static struct file_operations device_fops = {
 	.release        = dev_release
 };
 
-rc_t deregister_device(void)
+int deregister_device(void)
 {
     dev_t devno;
 
@@ -61,9 +61,9 @@ rc_t deregister_device(void)
     return -1;
 }
 
-rc_t register_device(void)
+int register_device(void)
 {
-    rc_t rc = 0;
+    int rc = 0;
     dev_t dev = 0;
 
     if (device_major != 0) {

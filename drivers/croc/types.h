@@ -19,7 +19,6 @@
 #ifndef _CROCODILE_LKM_TYPES_H_
 #define _CROCODILE_LKM_TYPES_H_
 
-#include <linux/cdev.h>
 #include <linux/linkage.h>
 #include <linux/mutex.h>
 #include <linux/types.h>
@@ -29,18 +28,6 @@
  ******************************************************************************/
 
 typedef int                 rc_t;
-
-/******************************************************************************
- *  Device types.
- ******************************************************************************/
-
-struct module_dev
-{
-    struct mutex lock;  /* mutual exclusion semaphore   */
-    struct cdev cdev;   /* char device structure        */
-};
-
-typedef struct module_dev   module_dev_t;
 
 /******************************************************************************
  *  System table types.
@@ -55,5 +42,5 @@ typedef unsigned long       sys_call_table_t;
 /* Type of system call functions. */
 typedef asmlinkage long (*sys_call_fn_t)(const struct pt_regs*);
 
-#endif /* _CROCODILE_LKM_DEVICE_TYPES_H_ */
+#endif /* _CROCODILE_LKM_TYPES_H_ */
 

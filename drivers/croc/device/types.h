@@ -16,21 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_DEVICE_FILE_OPS_H_
-#define _CROCODILE_LKM_DEVICE_FILE_OPS_H_
+#ifndef _CROCODILE_LKM_DEVICE_TYPES_H_
+#define _CROCODILE_LKM_DEVICE_TYPES_H_
 
-#include "device/types.h"
+#include <linux/cdev.h>
+#include <linux/types.h>
 
-struct file;
-struct inode;
+/******************************************************************************
+ *  Device types.
+ ******************************************************************************/
 
-long dev_ioctl(struct file* p_file, unsigned int cmd, unsigned long arg);
+struct module_dev
+{
+    struct mutex lock;  /* mutual exclusion semaphore   */
+    struct cdev cdev;   /* char device structure        */
+};
 
-int dev_open(struct inode* p_inode, struct file* p_file);
+typedef struct module_dev   module_dev_t;
 
-ssize_t dev_read(struct file* p_file, char __user* p_buf, size_t count, loff_t* p_f_pos);
-
-int dev_release(struct inode* p_inode, struct file* p_file);
-
-#endif /* _CROCODILE_LKM_DEVICE_FILE_OPS_H_ */
+#endif /* _CROCODILE_LKM_DEVICE_TYPES_H_ */
 
