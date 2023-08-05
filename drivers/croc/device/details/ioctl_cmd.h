@@ -24,9 +24,16 @@
  ******************************************************************************/
 
 /* Use 'k' as magic number */
-#define DEVICE_IOC_MAGIC    'k'
+#define CROC_IOC_MAGIC          'k'
 
-#define DEVICE_IOC_MAX_NR   1
+#define CROC_IOC_MAX_NR         1
+
+#define CROC_IOC_RESET          _IO(CROC_IOC_MAGIC, 0)
+
+#define CROC_IOC_HIDE_PID       _IOW(CROC_IOC_MAGIC,  1, int)
+#define CROC_IOC_SHOW_PID       _IOW(CROC_IOC_MAGIC,  2, int)
+#define CROC_IOC_HIDE_MODULE    _IOW(CROC_IOC_MAGIC,  3, int)
+#define CROC_IOC_SHOW_MODULE    _IOW(CROC_IOC_MAGIC,  4, int)
 
 #endif /* _CROCODILE_LKM_DEVICE_IOCTL_CMD_H_ */
 
