@@ -35,7 +35,7 @@ void cdev_setup(module_dev_t* p_dev, int major, int minor, int idx,
         KLOG_NOTICE(LOG_PREFIX "error %d adding " MODULE_NAME "%d", err, idx);
     }
 
-    init_hash_table(&p_dev->hash_tbl);
+    hash_tbl_init(&p_dev->hash_tbl);
 }
 
 int cdev_trim(module_dev_t* p_dev)

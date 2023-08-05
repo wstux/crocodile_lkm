@@ -21,14 +21,14 @@
 
 #include "device/details/hash_tbl.h"
 
-size_t capacity(void)
+size_t hash_tbl_capacity(void)
 {
     return (1 << HASH_TBL_BITS);
 }
 
-int erase(hash_table_t* p_tbl, pid_t pid)
+int hash_tbl_erase(hash_table_t* p_tbl, pid_t pid)
 {
-    hash_node_t* p_node = find(p_tbl, pid);
+    hash_node_t* p_node = hash_tbl_find(p_tbl, pid);
     if (p_node == NULL) {
         return 0;
     }
@@ -39,7 +39,7 @@ int erase(hash_table_t* p_tbl, pid_t pid)
     return 0;
 }
 
-hash_node_t* find(hash_table_t* p_tbl, pid_t pid)
+hash_node_t* hash_tbl_find(hash_table_t* p_tbl, pid_t pid)
 {
     hash_node_t* p_cur = NULL;
     int is_contains = 0;
@@ -58,18 +58,18 @@ hash_node_t* find(hash_table_t* p_tbl, pid_t pid)
     return p_cur;
 }
 
-void init_hash_table(hash_table_t* p_tbl)
+void hash_tbl_init(hash_table_t* p_tbl)
 {
     __hash_init(p_tbl->tbl, HASH_SIZE(p_tbl->tbl));
 }
 
-int insert(hash_table_t* p_tbl, pid_t pid)
+int hash_tbl_insert(hash_table_t* p_tbl, pid_t pid)
 {
     hash_node_t* p_node;
-    if (is_contains(p_tbl, pid)) {
+    if (hash_tbl_is_contains(p_tbl, pid)) {
         return 0;
     }
-    if (p_tbl->size >= capacity()) {
+    if (p_tbl->size >= hash_tbl_capacity()) {
         return -1;
     }
 
@@ -79,8 +79,8 @@ int insert(hash_table_t* p_tbl, pid_t pid)
     return 0;
 }
 
-int is_contains(hash_table_t* p_tbl, pid_t pid)
+int hash_tbl_is_contains(hash_table_t* p_tbl, pid_t pid)
 {
-    return (find(p_tbl, pid) != NULL);
+    return (hash_tbl_find(p_tbl, pid) != NULL);
 }
 

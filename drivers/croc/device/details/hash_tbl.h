@@ -21,17 +21,17 @@
 
 #include "device/types.h"
 
-size_t capacity(void);
+size_t hash_tbl_capacity(void);
 
-int erase(hash_table_t* p_tbl, pid_t pid);
+int hash_tbl_erase(hash_table_t* p_tbl, pid_t pid);
 
-hash_node_t* find(hash_table_t* p_tbl, pid_t pid);
+hash_node_t* hash_tbl_find(hash_table_t* p_tbl, pid_t pid);
 
-void init_hash_table(hash_table_t* p_tbl);
+void hash_tbl_init(hash_table_t* p_tbl);
 
-int insert(hash_table_t* p_tbl, pid_t pid);
+int hash_tbl_insert(hash_table_t* p_tbl, pid_t pid);
 
-int is_contains(hash_table_t* p_tbl, pid_t pid);
+int hash_tbl_is_contains(hash_table_t* p_tbl, pid_t pid);
 
 #endif /* _CROCODILE_LKM_DEVICE_HASH_TBL_H_ */
 
