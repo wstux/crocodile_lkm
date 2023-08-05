@@ -29,7 +29,7 @@
         if (! _PLOGGER_CAN_LOG(logger, level)) { \
             break; \
         } \
-        _PLOG_IMPL(logger, level, fmt, __VA_ARGS__); \
+        _PLOG_IMPL(logger, level, fmt "\n", __VA_ARGS__); \
     } \
     while (0)
 
