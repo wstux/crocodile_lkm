@@ -32,5 +32,7 @@ ssize_t dev_read(struct file* p_file, char __user* p_buf, size_t count, loff_t* 
 
 int dev_release(struct inode* p_inode, struct file* p_file);
 
+ssize_t dev_write(struct file* p_file, const char __user* p_buf, size_t count, loff_t* p_f_pos);
+
 #endif /* _CROCODILE_LKM_DEVICE_FILE_OPS_H_ */
 

