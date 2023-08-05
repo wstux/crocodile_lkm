@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <linux/module.h>
+
 #include "proc/module_hide.h"
 
 static struct list_head* _p_prev_module = NULL;
