@@ -76,7 +76,7 @@ long process_hide(pid_t pid)
     struct task_struct* p_task = NULL;
     p_task = find_process(pid);
     if (p_task == NULL) {
-        return -1;
+        return -ESRCH; /* No such process */
     }
 
     if (! IS_PROC_HIDDEN(p_task)) {
@@ -90,7 +90,7 @@ long process_show(pid_t pid)
     struct task_struct* p_task = NULL;
     p_task = find_process(pid);
     if (p_task == NULL) {
-        return -1;
+        return -ESRCH; /* No such process */
     }
 
     if (IS_PROC_HIDDEN(p_task)) {
