@@ -17,7 +17,6 @@
  */
 
 #include "device/details/cdev_utils.h"
-#include "device/details/hash_tbl.h"
 #include "logging/logger.h"
 
 void cdev_setup(module_dev_t* p_dev, int major, int minor, int idx, 
@@ -34,8 +33,6 @@ void cdev_setup(module_dev_t* p_dev, int major, int minor, int idx,
     if (err) {
         KLOG_NOTICE(LOG_PREFIX "error %d adding " MODULE_NAME "%d", err, idx);
     }
-
-    hash_tbl_init(&p_dev->hash_tbl);
 }
 
 int cdev_trim(module_dev_t* p_dev)

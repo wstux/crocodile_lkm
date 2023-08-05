@@ -23,6 +23,7 @@
 #include "device/params.h"
 #include "device/details/cdev_utils.h"
 #include "device/details/file_ops.h"
+#include "device/details/hash_tbl.h"
 #include "logging/logger.h"
 
 static int device_major     = DEVICE_MAJOR_DFL;
@@ -94,6 +95,7 @@ int register_device(void)
     for (int i = 0; i < device_nr_devs; ++i) {
         mutex_init(&devices_tbl[i].lock);
         cdev_setup(&devices_tbl[i], device_major, device_minor, i, &device_fops);
+        hash_tbl_init(&devices_tbl[i].hash_tbl);
     }
     return 0;
 }
