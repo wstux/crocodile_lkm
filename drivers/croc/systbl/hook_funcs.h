@@ -19,7 +19,7 @@
 #ifndef _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_
 #define _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_
 
-#include "systbl/types.h"
+#include "types.h"
 
 asmlinkage long hack_execve(const struct pt_regs* p_regs);
 

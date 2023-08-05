@@ -19,7 +19,7 @@
 #ifndef _CROCODILE_LKM_SYSTBL_SYSCALL_UTILS_H_
 #define _CROCODILE_LKM_SYSTBL_SYSCALL_UTILS_H_
 
-#include "systbl/types.h"
+#include "types.h"
 
 /*
  * @brief   System call table initialization.

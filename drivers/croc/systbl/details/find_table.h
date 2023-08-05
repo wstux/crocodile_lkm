@@ -19,7 +19,7 @@
 #ifndef _CROCODILE_LKM_SYSTBL_FIND_TABLE_H_
 #define _CROCODILE_LKM_SYSTBL_FIND_TABLE_H_
 
-#include "systbl/types.h"
+#include "types.h"
 
 /*
  * @brief   Finding a pointer to the system call table.
