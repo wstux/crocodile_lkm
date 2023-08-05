@@ -16,39 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <linux/cdev.h>
-#include <linux/kernel.h>
-#include <linux/module.h>
-#include <linux/syscalls.h>
+#ifndef _CROCODILE_LKM_PARAMS_H_
+#define _CROCODILE_LKM_PARAMS_H_
 
-#include "params.h"
 #include "version.h"
-#include "logging/logger.h"
 
-/*
- * @brief   Module cleanup.
- */
-static void __exit cleanup_module_hsyst(void)
-{
-    KLOG_INFO(LOG_PREFIX "cleanup_module");
-}
+#define LOG_PREFIX  MODULE_NAME ": "
 
-/*
- * @brief   Module initialization.
- */
-static int __init init_module_hsyst(void)
-{
-    INIT_KLOGGER(LVL_WARN);
-    KLOG_INFO(LOG_PREFIX "init_module");
-
-    return 0;
-}
-
-module_init(init_module_hsyst);
-module_exit(cleanup_module_hsyst);
-
-MODULE_LICENSE("Dual BSD/GPL");
-MODULE_AUTHOR("Chistyakov Alexander");
-MODULE_DESCRIPTION("Some description...");
-MODULE_VERSION( MODULE_RELEASE_VERSION );
+#endif /* _CROCODILE_LKM_PARAMS_H_ */
 
