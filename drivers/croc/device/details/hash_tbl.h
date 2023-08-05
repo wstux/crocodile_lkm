@@ -16,31 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "device/details/cdev_utils.h"
-#include "device/details/hash_tbl.h"
-#include "logging/logger.h"
+#ifndef _CROCODILE_LKM_DEVICE_HASH_TBL_H_
+#define _CROCODILE_LKM_DEVICE_HASH_TBL_H_
 
-void cdev_setup(module_dev_t* p_dev, int major, int minor, int idx, 
-                struct file_operations* p_fops)
-{
-    int err;
-    int devno = MKDEV(major, minor + idx);
+#include "device/types.h"
 
-    cdev_init(&p_dev->cdev, p_fops);
-    p_dev->cdev.owner = THIS_MODULE;
-    err = cdev_add(&p_dev->cdev, devno, 1);
+size_t capacity(void);
 
-    /* Fail gracefully if need be */
-    if (err) {
-        KLOG_NOTICE(LOG_PREFIX "error %d adding " MODULE_NAME "%d", err, idx);
-    }
+int erase(hash_table_t* p_tbl, pid_t pid);
 
-    init_hash_table(&p_dev->hash_tbl);
-}
+hash_node_t* find(hash_table_t* p_tbl, pid_t pid);
 
-int cdev_trim(module_dev_t* p_dev)
-{
-    /* Do nothing now. */
-    return 0;
-}
+void init_hash_table(hash_table_t* p_tbl);
+
+int insert(hash_table_t* p_tbl, pid_t pid);
+
+int is_contains(hash_table_t* p_tbl, pid_t pid);
+
+#endif /* _CROCODILE_LKM_DEVICE_HASH_TBL_H_ */
 
