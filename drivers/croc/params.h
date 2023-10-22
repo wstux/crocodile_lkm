@@ -21,7 +21,7 @@
 
 #include "version.h"
 
-#define LOG_PREFIX  MODULE_NAME ": "
+#define LOG_PREFIX  "[" MODULE_NAME "]: "
 
 #endif /* _CROCODILE_LKM_PARAMS_H_ */
 

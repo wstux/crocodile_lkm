@@ -19,6 +19,7 @@
 #include <linux/fs.h>
 #include <linux/module.h>
 
+#include "params.h"
 #include "device/device.h"
 #include "device/params.h"
 #include "device/details/cdev_utils.h"

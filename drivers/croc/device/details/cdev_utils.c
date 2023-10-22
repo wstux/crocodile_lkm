@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "params.h"
 #include "device/details/cdev_utils.h"
 #include "logging/logger.h"
 

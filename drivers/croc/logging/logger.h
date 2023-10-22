@@ -25,73 +25,41 @@
 
 #include "logging/severity_level.h"
 #include "logging/details/log_impl.h"
-#include "logging/details/log_stubs.h"
 #include "logging/details/severity_level_impl.h"
 
 /*
  * Runtime logger initialization. The default logging level value is a LVL_WARN.
  */
-#define INIT_PLOGGER(logger, level) _INIT_PLOGGER_IMPL(logger, level)
+#define INIT_LOGGERF(logger, level) _INIT_LOGGERF_IMPL(logger, level)
 
 #if defined(__KERNEL__)
     /*
      * Runtime kernel logger initialization. The default logging level value
      * is a LVL_WARN.
      */
-    #define INIT_KLOGGER(level)     INIT_PLOGGER(printk, level)
+    #define INIT_KLOGGER(level)     INIT_LOGGERF(printk, level)
 #endif
 
 
-#if defined(LOGGER_USE_EMERG_LEVEL)
-    #define PLOG_EMERG(logger, fmt, ...) \
-        _PLOG(logger, LVL_EMERG, fmt, __VA_ARGS__)
-#endif
-
-#if defined(LOGGER_USE_FATAL_LEVEL)
-    #define PLOG_FATAL(logger, fmt, ...) \
-        _PLOG(logger, LVL_FATAL, fmt, __VA_ARGS__)
-#endif
-
-#if defined(LOGGER_USE_CRIT_LEVEL)
-    #define PLOG_CRIT(logger, fmt, ...) \
-        _PLOG(logger, LVL_CRIT, fmt, __VA_ARGS__)
-#endif
-
-#if defined(LOGGER_USE_ERROR_LEVEL)
-    #define PLOG_ERROR(logger, fmt, ...) \
-        _PLOG(logger, LOG_ERROR, fmt, __VA_ARGS__)
-#endif
-
-#if defined(LOGGER_USE_WARN_LEVEL)
-    #define PLOG_WARN(logger, fmt, ...) \
-        _PLOG(logger, LVL_WARN, fmt, __VA_ARGS__)
-#endif
-
-#if defined(LOGGER_USE_NOTICE_LEVEL)
-    #define PLOG_NOTICE(logger, fmt, ...) \
-        _PLOG(logger, LVL_NOTICE, fmt, __VA_ARGS__)
-#endif
-
-#if defined(LOGGER_USE_INFO_LEVEL)
-    #define PLOG_INFO(logger, fmt, ...) \
-        _PLOG(logger, LVL_INFO, fmt, __VA_ARGS__)
-#endif
-
-#if defined(LOGGER_USE_DEBUG_LEVEL)
-    #define PLOG_DEBUG(logger, fmt, ...) \
-        _PLOG(logger, LVL_DEBUG, fmt, __VA_ARGS__)
-#endif
+#define LOGF_EMERG(logger, fmt, ...)    _LOGF(logger, LVL_EMERG, fmt, __VA_ARGS__)
+#define LOGF_FATAL(logger, fmt, ...)    _LOGF(logger, LVL_FATAL, fmt, __VA_ARGS__)
+#define LOGF_CRIT(logger, fmt, ...)     _LOGF(logger, LVL_CRIT, fmt, __VA_ARGS__)
+#define LOGF_ERROR(logger, fmt, ...)    _LOGF(logger, LOG_ERROR, fmt, __VA_ARGS__)
+#define LOGF_WARN(logger, fmt, ...)     _LOGF(logger, LVL_WARN, fmt, __VA_ARGS__)
+#define LOGF_NOTICE(logger, fmt, ...)   _LOGF(logger, LVL_NOTICE, fmt, __VA_ARGS__)
+#define LOGF_INFO(logger, fmt, ...)     _LOGF(logger, LVL_INFO, fmt, __VA_ARGS__)
+#define LOGF_DEBUG(logger, fmt, ...)    _LOGF(logger, LVL_DEBUG, fmt, __VA_ARGS__)
 
 
 #if defined(__KERNEL__)
-    #define KLOG_EMERG(fmt, ...)    PLOG_EMERG(printk, fmt, __VA_ARGS__)
-    #define KLOG_FATAL(fmt, ...)    PLOG_FATAL(printk, fmt, __VA_ARGS__)
-    #define KLOG_CRIT(fmt, ...)     PLOG_CRIT(printk, fmt, __VA_ARGS__)
-    #define KLOG_ERROR(fmt, ...)    PLOG_ERROR(printk, fmt, __VA_ARGS__)
-    #define KLOG_WARN(fmt, ...)     PLOG_WARN(printk, fmt, __VA_ARGS__)
-    #define KLOG_NOTICE(fmt, ...)   PLOG_NOTICE(printk, fmt, __VA_ARGS__)
-    #define KLOG_INFO(fmt, ...)     PLOG_INFO(printk, fmt, __VA_ARGS__)
-    #define KLOG_DEBUG(fmt, ...)    PLOG_DEBUG(printk, fmt, __VA_ARGS__)
+    #define KLOG_EMERG(fmt, ...)    LOGF_EMERG(printk, fmt, __VA_ARGS__)
+    #define KLOG_FATAL(fmt, ...)    LOGF_FATAL(printk, fmt, __VA_ARGS__)
+    #define KLOG_CRIT(fmt, ...)     LOGF_CRIT(printk, fmt, __VA_ARGS__)
+    #define KLOG_ERROR(fmt, ...)    LOGF_ERROR(printk, fmt, __VA_ARGS__)
+    #define KLOG_WARN(fmt, ...)     LOGF_WARN(printk, fmt, __VA_ARGS__)
+    #define KLOG_NOTICE(fmt, ...)   LOGF_NOTICE(printk, fmt, __VA_ARGS__)
+    #define KLOG_INFO(fmt, ...)     LOGF_INFO(printk, fmt, __VA_ARGS__)
+    #define KLOG_DEBUG(fmt, ...)    LOGF_DEBUG(printk, fmt, __VA_ARGS__)
 #endif
 
 #endif /* _CROCODILE_LKM_LOGGING_LOGGER_H_ */
