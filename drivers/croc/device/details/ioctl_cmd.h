@@ -30,12 +30,16 @@
 
 #define CROC_IOC_MAX_NR         1
 
-#define CROC_IOC_RESET          _IO(CROC_IOC_MAGIC, 0)
+#define CROC_IOC_HIDE_CMD       0b000
+#define CROC_IOC_SHOW_CMD       0b001
+#define CROC_IOC_PID            0b010
+#define CROC_IOC_MOD            0b100
 
-#define CROC_IOC_HIDE_PID       _IOW(CROC_IOC_MAGIC,  1, int)
-#define CROC_IOC_SHOW_PID       _IOW(CROC_IOC_MAGIC,  2, int)
-#define CROC_IOC_HIDE_MODULE    _IOW(CROC_IOC_MAGIC,  3, int)
-#define CROC_IOC_SHOW_MODULE    _IOW(CROC_IOC_MAGIC,  4, int)
+#define CROC_IOC_RESET          _IO(CROC_IOC_MAGIC, 0)
+#define CROC_IOC_HIDE_PID       _IOW(CROC_IOC_MAGIC,  CROC_IOC_PID | CROC_IOC_HIDE_CMD, int)   // 0b010
+#define CROC_IOC_SHOW_PID       _IOW(CROC_IOC_MAGIC,  CROC_IOC_PID | CROC_IOC_SHOW_CMD, int)   // 0b011
+#define CROC_IOC_HIDE_MOD       _IOW(CROC_IOC_MAGIC,  CROC_IOC_MOD | CROC_IOC_HIDE_CMD, int)   // 0b100
+#define CROC_IOC_SHOW_MOD       _IOW(CROC_IOC_MAGIC,  CROC_IOC_MOD | CROC_IOC_SHOW_CMD, int)   // 0b101
 
 int ioc_hide_pid(module_dev_t* p_dev, pid_t pid);
 

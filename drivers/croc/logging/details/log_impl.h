@@ -1,5 +1,5 @@
 /*
- * crocodile_lkm
+ * logging
  * Copyright (C) 2023  Chistyakov Alexander
  *
  * This program is free software: you can redistribute it and/or modify

