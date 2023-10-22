@@ -23,6 +23,7 @@
 
 #include "params.h"
 #include "version.h"
+#include "device/device.h"
 #include "logging/logger.h"
 
 /*
@@ -30,7 +31,11 @@
  */
 static void __exit cleanup_module_hsyst(void)
 {
+    int rc = 0;
+
     KLOG_INFO(LOG_PREFIX "cleanup_module");
+
+    deregister_device();
 }
 
 /*
@@ -38,10 +43,14 @@ static void __exit cleanup_module_hsyst(void)
  */
 static int __init init_module_hsyst(void)
 {
-    INIT_KLOGGER(LVL_WARN);
+    int rc = 0;
+
+    INIT_KLOGGER(LVL_INFO);
     KLOG_INFO(LOG_PREFIX "init_module");
 
-    return 0;
+    rc = register_device();
+
+    return rc;
 }
 
 module_init(init_module_hsyst);
