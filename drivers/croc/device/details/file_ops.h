@@ -16,12 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_
-#define _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_
+#ifndef _CROCODILE_LKM_DEVICE_FILE_OPS_H_
+#define _CROCODILE_LKM_DEVICE_FILE_OPS_H_
 
-#include "types.h"
+#include "device/types.h"
 
-asmlinkage long hack_execve(const struct pt_regs* p_regs);
+struct file;
+struct inode;
 
-#endif /* _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_ */
+long dev_ioctl(struct file* p_file, unsigned int cmd, unsigned long arg);
+
+int dev_open(struct inode* p_inode, struct file* p_file);
+
+ssize_t dev_read(struct file* p_file, char __user* p_buf, size_t count, loff_t* p_f_pos);
+
+int dev_release(struct inode* p_inode, struct file* p_file);
+
+ssize_t dev_write(struct file* p_file, const char __user* p_buf, size_t count, loff_t* p_f_pos);
+
+#endif /* _CROCODILE_LKM_DEVICE_FILE_OPS_H_ */
 

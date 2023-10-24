@@ -26,7 +26,7 @@ static int _severity_level = LVL_WARN;
 
 int _can_log(int lvl)
 {
-    return (lvl >= _severity_level);
+    return (lvl <= _severity_level);
 }
 
 int _init_logger(int lvl)

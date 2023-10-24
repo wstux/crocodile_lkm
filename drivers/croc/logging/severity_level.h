@@ -44,5 +44,9 @@
 #define LVL_INFO      6
 #define LVL_DEBUG     7
 
+#if ! defined(DEFAULT_LOGGER_LEVEL)
+    #define DEFAULT_LOGGER_LEVEL        WARN
+#endif
+
 #endif /* _CROCODILE_LKM_LOGGING_SEVERITY_LEVEL_H_ */
 

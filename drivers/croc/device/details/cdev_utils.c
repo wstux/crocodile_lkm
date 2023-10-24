@@ -16,12 +16,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_
-#define _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_
+#include "params.h"
+#include "device/details/cdev_utils.h"
+#include "logging/logger.h"
 
-#include "types.h"
+void cdev_setup(module_dev_t* p_dev, int major, int minor, int idx, 
+                struct file_operations* p_fops)
+{
+    int err;
+    int devno = MKDEV(major, minor + idx);
 
-asmlinkage long hack_execve(const struct pt_regs* p_regs);
+    cdev_init(&p_dev->cdev, p_fops);
+    p_dev->cdev.owner = THIS_MODULE;
+    err = cdev_add(&p_dev->cdev, devno, 1);
 
-#endif /* _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_ */
+    /* Fail gracefully if need be */
+    if (err) {
+        KLOG_NOTICE(LOG_PREFIX "error %d adding " MODULE_NAME "%d", err, idx);
+    }
+}
+
+int cdev_trim(module_dev_t* p_dev)
+{
+    /* Do nothing now. */
+    return 0;
+}
 

@@ -16,19 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_SYSTBL_TYPES_H_
-#define _CROCODILE_LKM_SYSTBL_TYPES_H_
+#ifndef _CROCODILE_LKM_PARAMS_H_
+#define _CROCODILE_LKM_PARAMS_H_
 
-#include <linux/linkage.h>
+#include "version.h"
 
-/* Forward declaration of the system structure. */
-struct pt_regs;
+#define LOG_PREFIX  "[" MODULE_NAME "]: "
 
-/* Type of system call table pointer. */
-typedef unsigned long   sys_call_table_t;
-
-/* Type of system call functions. */
-typedef asmlinkage long (*sys_call_fn_t)(const struct pt_regs*);
-
-#endif /* _CROCODILE_LKM_SYSTBL_TYPES_H_ */
+#endif /* _CROCODILE_LKM_PARAMS_H_ */
 

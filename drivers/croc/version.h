@@ -16,12 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_
-#define _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_
+#ifndef _CROCODILE_LKM_VERSION_H_
+#define _CROCODILE_LKM_VERSION_H_
 
-#include "types.h"
+#define MODULE_NAME "croc"
 
-asmlinkage long hack_execve(const struct pt_regs* p_regs);
+#define MODULE_VERSION_MAJOR    0
+#define MODULE_VERSION_MINOR    0
+#define MODULE_VERSION_PATCH    3
 
-#endif /* _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_ */
+#define MODULE_RELEASE_VERSION  "MODULE_VERSION_MAJOR.MODULE_VERSION_MINOR.MODULE_VERSION_PATCH"
+
+#endif /* _CROCODILE_LKM_VERSION_H_ */
 

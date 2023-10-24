@@ -16,12 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_
-#define _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_
+#ifndef _CROCODILE_LKM_DEVICE_HASH_TBL_H_
+#define _CROCODILE_LKM_DEVICE_HASH_TBL_H_
 
-#include "types.h"
+#include "device/types.h"
 
-asmlinkage long hack_execve(const struct pt_regs* p_regs);
+size_t hash_tbl_capacity(void);
 
-#endif /* _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_ */
+int hash_tbl_erase(hash_table_t* p_tbl, pid_t pid);
+
+hash_node_t* hash_tbl_find(hash_table_t* p_tbl, pid_t pid);
+
+void hash_tbl_init(hash_table_t* p_tbl);
+
+int hash_tbl_insert(hash_table_t* p_tbl, pid_t pid);
+
+int hash_tbl_is_contains(hash_table_t* p_tbl, pid_t pid);
+
+#endif /* _CROCODILE_LKM_DEVICE_HASH_TBL_H_ */
 

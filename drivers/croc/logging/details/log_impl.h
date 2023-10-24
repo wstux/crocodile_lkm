@@ -1,5 +1,5 @@
 /*
- * crocodile_lkm
+ * logging
  * Copyright (C) 2023  Chistyakov Alexander
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,15 +21,15 @@
 
 #include "logging/details/severity_level_impl.h"
 
-#define _PLOG_IMPL(logger, level, fmt, ...) \
+#define _LOGF_IMPL(logger, level, fmt, ...) \
     logger(_LOG_LEVEL(level) fmt __VA_OPT__(,) __VA_ARGS__)
 
-#define _PLOG(logger, level, fmt, ...) \
+#define _LOGF(logger, level, fmt, ...) \
     do { \
-        if (! _PLOGGER_CAN_LOG(logger, level)) { \
+        if (! _LOGGERF_CAN_LOG(logger, level)) { \
             break; \
         } \
-        _PLOG_IMPL(logger, level, fmt, __VA_ARGS__); \
+        _LOGF_IMPL(logger, level, fmt "\n", __VA_ARGS__); \
     } \
     while (0)
 

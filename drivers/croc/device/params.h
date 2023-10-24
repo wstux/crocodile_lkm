@@ -16,12 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_
-#define _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_
+#ifndef _CROCODILE_LKM_DEVICE_PARAMS_H_
+#define _CROCODILE_LKM_DEVICE_PARAMS_H_
 
-#include "types.h"
+#include "version.h"
+#include "params.h"
 
-asmlinkage long hack_execve(const struct pt_regs* p_regs);
+#ifndef DEVICE_MAJOR_DFL
+    #define DEVICE_MAJOR_DFL        0
+#endif
 
-#endif /* _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_ */
+#ifndef DEVICE_MINOR_DFL
+    #define DEVICE_MINOR_DFL        0
+#endif
+
+#ifndef DEVICE_NR_DEVS_DFL
+    #define DEVICE_NR_DEVS_DFL      1
+#endif
+
+#endif /* _CROCODILE_LKM_DEVICE_PARAMS_H_ */
 

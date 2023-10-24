@@ -21,14 +21,21 @@
 #include <linux/module.h>
 #include <linux/syscalls.h>
 
+#include "params.h"
+#include "version.h"
+#include "device/device.h"
 #include "logging/logger.h"
 
 /*
  * @brief   Module cleanup.
  */
-static void cleanup_module_hsyst(void)
+static void __exit cleanup_module_hsyst(void)
 {
-    KLOG_INFO(LOG_PREFIX "cleanup_module\n");
+    int rc = 0;
+
+    KLOG_INFO(LOG_PREFIX "cleanup_module");
+
+    deregister_device();
 }
 
 /*
@@ -36,17 +43,21 @@ static void cleanup_module_hsyst(void)
  */
 static int __init init_module_hsyst(void)
 {
-    INIT_KLOGGER(LVL_WARN);
-    KLOG_INFO(LOG_PREFIX "init_module\n");
+    int rc = 0;
 
-    return 0;
+    INIT_KLOGGER(LVL_INFO);
+    KLOG_INFO(LOG_PREFIX "init_module");
+
+    rc = register_device();
+
+    return rc;
 }
 
 module_init(init_module_hsyst);
 module_exit(cleanup_module_hsyst);
 
-MODULE_LICENSE("GPL");
+MODULE_LICENSE("Dual BSD/GPL");
 MODULE_AUTHOR("Chistyakov Alexander");
 MODULE_DESCRIPTION("Some description...");
-MODULE_VERSION("0.0.1");
+MODULE_VERSION( MODULE_RELEASE_VERSION );
 
