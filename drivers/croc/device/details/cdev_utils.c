@@ -16,9 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "params.h"
+#include "logging.h"
 #include "device/details/cdev_utils.h"
-#include "logging/logger.h"
 
 void cdev_setup(module_dev_t* p_dev, int major, int minor, int idx, 
                 struct file_operations* p_fops)

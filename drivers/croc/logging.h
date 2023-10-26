@@ -16,12 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_PARAMS_H_
-#define _CROCODILE_LKM_PARAMS_H_
+#ifndef _CROCODILE_LKM_LOGGING_H_
+#define _CROCODILE_LKM_LOGGING_H_
 
 #include "version.h"
+#include "logging/logger.h"
 
-#define LOG_PREFIX  "[" MODULE_NAME "]: "
+#define LOG_PREFIX  MODULE_NAME ": "
 
-#endif /* _CROCODILE_LKM_PARAMS_H_ */
+#endif /* _CROCODILE_LKM_LOGGING_H_ */
 

@@ -21,11 +21,11 @@
 #include <linux/string.h>
 #include <linux/version.h>
 
+#include "logging.h"
 #include "types.h"
 #include "device/details/cdev_utils.h"
 #include "device/details/file_ops.h"
 #include "device/details/ioctl_cmd.h"
-#include "logging/logger.h"
 
 static int parse_cmd(char* p_data, unsigned int* p_cmd, unsigned long* p_pid)
 {
