@@ -16,17 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <linux/atomic.h>
+
 #include "logging/severity_level.h"
 #include "logging/details/severity_level_impl.h"
 
 #define _LVL_COUNT  LVL_DEBUG + 1
 
 /* Default severity level. */
-static int _severity_level = LVL_WARN;
+static atomic_t _severity_level = ATOMIC_INIT(LVL_WARN); 
 
 int _can_log(int lvl)
 {
-    return (lvl <= _severity_level);
+    return (lvl <= atomic_read(&_severity_level));
 }
 
 int _init_logger(int lvl)
@@ -34,8 +36,16 @@ int _init_logger(int lvl)
     if ((lvl < 0) || (lvl > _LVL_COUNT)) {
         return -1;
     }
-    _severity_level = lvl;
+    atomic_set(&_severity_level, lvl);
     return 0;
+}
+
+void _set_log_level(int lvl)
+{
+    if ((lvl < 0) || (lvl > _LVL_COUNT)) {
+        return;
+    }
+    atomic_set(&_severity_level, lvl);
 }
 
 #undef _LVL_COUNT

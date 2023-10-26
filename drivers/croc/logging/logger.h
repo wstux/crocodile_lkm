@@ -31,6 +31,7 @@
  * Runtime logger initialization. The default logging level value is a LVL_WARN.
  */
 #define INIT_LOGGERF(logger, level) _INIT_LOGGERF_IMPL(logger, level)
+#define SET_LOGF_LEVEL(level)       _SET_LOGF_LEVEL_IMPL(level)
 
 #if defined(__KERNEL__)
     /*

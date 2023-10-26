@@ -48,10 +48,12 @@
 
 inline int _can_log(int lvl);
 inline int _init_logger(int lvl);
+inline void _set_log_level(int lvl);
 
 #define _INIT_LOGGERF_IMPL(logger, level)   _init_logger(level)
 #define _LOG_LEVEL(level)                   _IMPL_LOG_LVL_ ## level
 #define _LOGGERF_CAN_LOG(logger, level)     _can_log(level)
+#define _SET_LOGF_LEVEL_IMPL(level)         _set_log_level(level)
 
 #endif /* _CROCODILE_LKM_LOGGING_SEVERITY_LEVEL_IMPL_H_ */
 
