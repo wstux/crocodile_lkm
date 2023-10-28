@@ -178,6 +178,6 @@ ssize_t dev_write(struct file* p_file, const char __user* p_buf, size_t count, l
     }
 
     KLOG_DEBUG(LOG_PREFIX "device::dev_read: finished with return code %d", rc);
-    return rc;
+    return count;
 }
 
