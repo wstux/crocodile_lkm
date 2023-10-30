@@ -54,11 +54,11 @@ static int _fill_cmd(char** p_cmd_str, unsigned int* p_cmd)
 {
     if (strcmp(*p_cmd_str, "PID") == 0) {
         KLOG_DEBUG(LOG_PREFIX "device::_fill_cmd: processing pid");
-        (*p_cmd_str)[12] = 0;
+        (*p_cmd_str)[8] = 0;
         *p_cmd = CROC_IOC_PID;
     } else if (strcmp(*p_cmd_str, "MOD") == 0) {
         KLOG_DEBUG(LOG_PREFIX "device::_fill_cmd: processing module");
-        (*p_cmd_str)[12] = 0;
+        (*p_cmd_str)[8] = 0;
         *p_cmd = CROC_IOC_MOD;
     } else if (strcmp(*p_cmd_str, "LOG") == 0) {
         KLOG_DEBUG(LOG_PREFIX "device::_fill_cmd: processing log level");

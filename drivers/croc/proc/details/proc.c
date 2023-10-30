@@ -26,7 +26,7 @@
  ******************************************************************************/
 
 #define INVISIBLE_BIT               0x10000000
-#define IS_PROC_HIDDEN(p_task)      ((p_task->flags & INVISIBLE_BIT) != 0)
+#define IS_PROC_HIDDEN(p_task)      ((p_task->flags & INVISIBLE_BIT) == 0)
 
 /******************************************************************************
  *  Public functions.
