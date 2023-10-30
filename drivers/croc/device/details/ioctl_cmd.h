@@ -46,7 +46,5 @@ int ioc_hide_pid(module_dev_t* p_dev, pid_t pid);
 
 int ioc_show_pid(module_dev_t* p_dev, pid_t pid);
 
-int ioc_parse_cmd(char* p_cmd_str, size_t count, unsigned int* p_cmd, unsigned long* p_arg);
-
 #endif /* _CROCODILE_LKM_DEVICE_IOCTL_CMD_H_ */
 

@@ -6,6 +6,7 @@ DriverTarget(croc
         device/details/file_ops.c
         device/details/hash_tbl.c
         device/details/ioctl_cmd.c
+        device/details/parser.c
         logging/details/severity_level_impl.c
         proc/details/module_hide.c
         proc/details/proc.c
