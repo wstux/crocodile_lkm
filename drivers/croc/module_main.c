@@ -21,10 +21,9 @@
 #include <linux/module.h>
 #include <linux/syscalls.h>
 
-#include "params.h"
+#include "logging.h"
 #include "version.h"
 #include "device/device.h"
-#include "logging/logger.h"
 
 /*
  * @brief   Module cleanup.

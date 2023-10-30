@@ -21,6 +21,14 @@ Remove the module(as root)
 rmmod croc
 ```
 
+## Usage
+
+```
+cat > /dev/croc << EOF
+IOC_PID_HIGH_<pid>
+EOF
+```
+
 ## References
 1. [Wikipedia Rootkit](https://en.wikipedia.org/wiki/Rootkit)
 2. [Linux Device Drivers](http://lwn.net/Kernel/LDD3/)

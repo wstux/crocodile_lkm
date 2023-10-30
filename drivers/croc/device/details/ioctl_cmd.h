@@ -30,10 +30,11 @@
 
 #define CROC_IOC_MAX_NR         1
 
-#define CROC_IOC_HIDE_CMD       0b000
-#define CROC_IOC_SHOW_CMD       0b001
-#define CROC_IOC_PID            0b010
-#define CROC_IOC_MOD            0b100
+#define CROC_IOC_HIDE_CMD       0b00001
+#define CROC_IOC_SHOW_CMD       0b00010
+#define CROC_IOC_PID            0b00100
+#define CROC_IOC_MOD            0b01000
+#define CROC_IOC_LOG            0b10000
 
 #define CROC_IOC_RESET          _IO(CROC_IOC_MAGIC, 0)
 #define CROC_IOC_HIDE_PID       _IOW(CROC_IOC_MAGIC,  CROC_IOC_PID | CROC_IOC_HIDE_CMD, int)   // 0b010
