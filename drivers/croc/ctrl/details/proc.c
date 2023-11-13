@@ -19,7 +19,7 @@
 #include <linux/pid.h>
 #include <linux/pid_namespace.h>
 
-#include "ctrl/proc.h"
+#include "ctrl/details/proc.h"
 
 /******************************************************************************
  *  Private functions.

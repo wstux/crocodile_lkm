@@ -19,7 +19,9 @@
 #ifndef _CROCODILE_LKM_DEVICE_PARSER_H_
 #define _CROCODILE_LKM_DEVICE_PARSER_H_
 
-int parse_cmd(char* p_cmd_str, size_t count, unsigned int* p_cmd, unsigned long* p_arg);
+#include <linux/types.h>
+
+int parse_str_cmd(char* p_cmd_str, size_t count, unsigned int* p_cmd, unsigned long* p_arg);
 
 #endif /* _CROCODILE_LKM_DEVICE_PARSER_H_ */
 

@@ -20,6 +20,7 @@
 #define _CROCODILE_LKM_LOGGING_LOGGER_H_
 
 #if defined(__KERNEL__)
+    #include <linux/kernel.h>
     #include <linux/kern_levels.h>
 #endif
 

@@ -16,9 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <linux/string.h>
+
 #include "logging.h"
-#include "device/details/ioctl_cmd.h"
-#include "device/details/parser.h"
+#include "ctrl/ioctl.h"
+#include "ctrl/details/parser_str_cmd.h"
 
 static int _check_cmd(char** p_cmd_str, size_t count)
 {
@@ -121,7 +123,7 @@ static int _fill_cmd_arg(char** p_cmd_str, unsigned int* p_cmd, unsigned long* p
     return rc;
 }
 
-int parse_cmd(char* p_cmd_str, size_t count, unsigned int* p_cmd, unsigned long* p_arg)
+int parse_str_cmd(char* p_cmd_str, size_t count, unsigned int* p_cmd, unsigned long* p_arg)
 {
     int rc = 0;
 

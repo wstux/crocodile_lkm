@@ -18,15 +18,14 @@
 
 #include <linux/fs.h>
 #include <linux/kernel.h>
-#include <linux/string.h>
 #include <linux/version.h>
 
 #include "logging.h"
 #include "types.h"
+#include "ctrl/ctrl.h"
 #include "device/details/cdev_utils.h"
 #include "device/details/file_ops.h"
 #include "device/details/ioctl_cmd.h"
-#include "device/details/parser.h"
 
 long dev_ioctl(struct file* p_file, unsigned int cmd, unsigned long arg)
 {
@@ -153,7 +152,7 @@ ssize_t dev_write(struct file* p_file, const char __user* p_buf, size_t count, l
 		return -EFAULT;
 	}
 
-    rc = parse_cmd(buffer, count, &cmd, &arg);
+    rc = parse_str_cmd(buffer, count, &cmd, &arg);
     if (rc != 0) {
         KLOG_DEBUG(LOG_PREFIX "device::dev_read: failed to parse command; reason %d", rc);
         return rc;

@@ -17,7 +17,7 @@
  */
 
 #include "logging.h"
-#include "ctrl/proc.h"
+#include "ctrl/ctrl.h"
 #include "device/details/hash_tbl.h"
 #include "device/details/ioctl_cmd.h"
 
