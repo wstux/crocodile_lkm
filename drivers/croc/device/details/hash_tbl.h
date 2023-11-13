@@ -19,7 +19,7 @@
 #ifndef _CROCODILE_LKM_DEVICE_HASH_TBL_H_
 #define _CROCODILE_LKM_DEVICE_HASH_TBL_H_
 
-#include "device/types.h"
+#include "types.h"
 
 size_t hash_tbl_capacity(void);
 

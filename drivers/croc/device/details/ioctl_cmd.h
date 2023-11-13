@@ -19,7 +19,7 @@
 #ifndef _CROCODILE_LKM_DEVICE_IOCTL_CMD_H_
 #define _CROCODILE_LKM_DEVICE_IOCTL_CMD_H_
 
-#include "device/types.h"
+#include "types.h"
 
 /******************************************************************************
  * Ioctl definitions

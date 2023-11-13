@@ -30,8 +30,8 @@
 
 long dev_ioctl(struct file* p_file, unsigned int cmd, unsigned long arg)
 {
-    rc_t err = 0;
-    rc_t retval = 0;
+    int err = 0;
+    int retval = 0;
     pid_t pid;
     module_dev_t* p_dev;
 

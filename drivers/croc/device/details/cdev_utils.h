@@ -19,7 +19,7 @@
 #ifndef _CROCODILE_LKM_DEVICE_DEVICE_UTILS_H_
 #define _CROCODILE_LKM_DEVICE_DEVICE_UTILS_H_
 
-#include "device/types.h"
+#include "types.h"
 
 void cdev_setup(module_dev_t* p_dev, int major, int minor, int idx, 
                 struct file_operations* p_fops);

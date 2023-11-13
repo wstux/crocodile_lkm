@@ -19,7 +19,7 @@
 #ifndef _CROCODILE_LKM_DEVICE_FILE_OPS_H_
 #define _CROCODILE_LKM_DEVICE_FILE_OPS_H_
 
-#include "device/types.h"
+#include "types.h"
 
 struct file;
 struct inode;
