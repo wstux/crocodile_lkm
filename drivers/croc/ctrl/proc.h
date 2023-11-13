@@ -19,6 +19,8 @@
 #ifndef _CROCODILE_LKM_PROC_PROC_H_
 #define _CROCODILE_LKM_PROC_PROC_H_
 
+#include <linux/types.h>
+
 /* Forward declaration of the system structure. */
 struct pid;
 
