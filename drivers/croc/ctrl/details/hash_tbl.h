@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_DEVICE_HASH_TBL_H_
-#define _CROCODILE_LKM_DEVICE_HASH_TBL_H_
+#ifndef _CROCODILE_LKM_CTRL_HASH_TBL_H_
+#define _CROCODILE_LKM_CTRL_HASH_TBL_H_
 
 #include "types.h"
 

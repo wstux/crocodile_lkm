@@ -20,11 +20,11 @@
 #include <linux/module.h>
 
 #include "logging.h"
+#include "ctrl/details/hash_tbl.h"
 #include "device/device.h"
 #include "device/params.h"
 #include "device/details/cdev_utils.h"
 #include "device/details/file_ops.h"
-#include "device/details/hash_tbl.h"
 
 static int device_major     = DEVICE_MAJOR_DFL;
 static int device_minor     = DEVICE_MINOR_DFL;
