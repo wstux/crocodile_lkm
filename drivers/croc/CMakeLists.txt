@@ -1,9 +1,10 @@
 DriverTarget(croc
     SOURCES
         module_main.c
-        ctrl/details/module_hide.c
+        ctrl/details/ioctl_module.c
+        ctrl/details/ioctl_proc.c
         ctrl/details/parser_str_cmd.c
-        ctrl/details/proc.c
+        ctrl/details/pid_utils.c
         device/details/cdev_utils.c
         device/details/device.c
         device/details/file_ops.c

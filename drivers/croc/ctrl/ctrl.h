@@ -20,9 +20,10 @@
 #define _CROCODILE_LKM_CTRL_CTRL_H_
 
 #include "ctrl/ioctl.h"
-#include "ctrl/details/module_hide.h"
+#include "ctrl/details/ioctl_module.h"
+#include "ctrl/details/ioctl_proc.h"
 #include "ctrl/details/parser_str_cmd.h"
-#include "ctrl/details/proc.h"
+#include "ctrl/details/pid_utils.h"
 
 #endif /* _CROCODILE_LKM_CTRL_CTRL_H_ */
 

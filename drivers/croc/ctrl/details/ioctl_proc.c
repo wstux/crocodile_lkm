@@ -16,19 +16,5 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_PROC_MODULE_HIDE_H_
-#define _CROCODILE_LKM_PROC_MODULE_HIDE_H_
-
-/*
- * @todo    Implement restore and remove the LKM from sysfs.
- *          https://stackoverflow.com/questions/46502395/restore-or-remove-the-linux-kernel-module-from-sysfs
- */
-
-int is_module_hidden(void);
-
-void module_hide(void);
-
-void module_show(void);
-
-#endif /* _CROCODILE_LKM_PROC_MODULE_HIDE_H_ */
+#include "ctrl/details/ioctl_proc.h"
 

