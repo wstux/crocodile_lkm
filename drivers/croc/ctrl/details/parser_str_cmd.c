@@ -22,16 +22,20 @@
 #include "ctrl/ioctl.h"
 #include "ctrl/details/parser_str_cmd.h"
 
+/******************************************************************************
+ *  Private functions.
+ ******************************************************************************/
+
 static int _check_cmd(char** p_cmd_str, size_t count)
 {
     const int MAX_BUF_SIZE = 255;
 
     if ((count > MAX_BUF_SIZE - 1) || (count < 13)) {
-        KLOG_DEBUG(LOG_PREFIX "device::_check_cmd: invalid buffer size %ld", count);
+        KLOG_DEBUG(LOG_PREFIX "ctrl::_check_cmd: invalid buffer size %ld", count);
         return -EFAULT;
     }
     if (((*p_cmd_str)[3] != '_') || ((*p_cmd_str)[7] != '_')) {
-        KLOG_DEBUG(LOG_PREFIX "device::_check_cmd: invalid buffer format");
+        KLOG_DEBUG(LOG_PREFIX "ctrl::_check_cmd: invalid buffer format");
         return -EFAULT;
     }
     (*p_cmd_str)[3] = (*p_cmd_str)[7] = 0;
@@ -44,7 +48,7 @@ static int _check_cmd(char** p_cmd_str, size_t count)
 static int _check_cmd_header(char** p_cmd_str)
 {
     if (strcmp(*p_cmd_str, "IOC") != 0) {
-        KLOG_DEBUG(LOG_PREFIX "device::_check_cmd_header: invalid header");
+        KLOG_DEBUG(LOG_PREFIX "ctrl::_check_cmd_header: invalid header");
         return -EFAULT;
     }
     *p_cmd_str += 4;
@@ -54,15 +58,15 @@ static int _check_cmd_header(char** p_cmd_str)
 static int _fill_cmd(char** p_cmd_str, unsigned int* p_cmd)
 {
     if (strcmp(*p_cmd_str, "PID") == 0) {
-        KLOG_DEBUG(LOG_PREFIX "device::_fill_cmd: processing pid");
+        KLOG_DEBUG(LOG_PREFIX "ctrl::_fill_cmd: processing pid");
         (*p_cmd_str)[8] = 0;
         *p_cmd = CROC_IOC_PID;
     } else if (strcmp(*p_cmd_str, "MOD") == 0) {
-        KLOG_DEBUG(LOG_PREFIX "device::_fill_cmd: processing module");
+        KLOG_DEBUG(LOG_PREFIX "ctrl::_fill_cmd: processing module");
         (*p_cmd_str)[8] = 0;
         *p_cmd = CROC_IOC_MOD;
     } else if (strcmp(*p_cmd_str, "LOG") == 0) {
-        KLOG_DEBUG(LOG_PREFIX "device::_fill_cmd: processing log level");
+        KLOG_DEBUG(LOG_PREFIX "ctrl::_fill_cmd: processing log level");
         *p_cmd = CROC_IOC_LOG;
     } else {
         return -EFAULT;
@@ -71,10 +75,10 @@ static int _fill_cmd(char** p_cmd_str, unsigned int* p_cmd)
     *p_cmd_str += 4;
     if ((*p_cmd & CROC_IOC_PID) || (*p_cmd & CROC_IOC_MOD)) {
         if (strcmp(*p_cmd_str, "HIDE") == 0) {
-            KLOG_DEBUG(LOG_PREFIX "device::_fill_cmd: hide pid");
+            KLOG_DEBUG(LOG_PREFIX "ctrl::_fill_cmd: hide pid");
             *p_cmd = *p_cmd | CROC_IOC_HIDE_CMD;
         } else if (strcmp(*p_cmd_str, "SHOW") == 0) {
-            KLOG_DEBUG(LOG_PREFIX "device::_fill_cmd: show pid");
+            KLOG_DEBUG(LOG_PREFIX "ctrl::_fill_cmd: show pid");
             *p_cmd = *p_cmd | CROC_IOC_SHOW_CMD;
         } else {
             return -EFAULT;
@@ -119,33 +123,37 @@ static int _fill_cmd_arg(char** p_cmd_str, unsigned int* p_cmd, unsigned long* p
             rc = 0;
         }
     }
-    KLOG_DEBUG(LOG_PREFIX "device::_fill_cmd_arg: return code %d", rc);
+    KLOG_DEBUG(LOG_PREFIX "ctrl::_fill_cmd_arg: return code %d", rc);
     return rc;
 }
+
+/******************************************************************************
+ *  Public functions.
+ ******************************************************************************/
 
 int parse_str_cmd(char* p_cmd_str, size_t count, unsigned int* p_cmd, unsigned long* p_arg)
 {
     int rc = 0;
 
     if ((p_cmd_str == NULL) || (p_cmd == NULL) || (p_arg == NULL)) {
-        KLOG_DEBUG(LOG_PREFIX "device::ioc_parse_cmd: invalid input params");
+        KLOG_DEBUG(LOG_PREFIX "ctrl::ioc_parse_cmd: invalid input params");
         return -EFAULT;
     }
 
     rc = _check_cmd(&p_cmd_str, count);
     if (rc != 0) {
-        KLOG_DEBUG(LOG_PREFIX "device::ioc_parse_cmd: failed to check command; reason: %d", rc);
+        KLOG_DEBUG(LOG_PREFIX "ctrl::ioc_parse_cmd: failed to check command; reason: %d", rc);
         return rc;
     }
     rc = _check_cmd_header(&p_cmd_str);
     if (rc != 0) {
-        KLOG_DEBUG(LOG_PREFIX "device::ioc_parse_cmd: invalid header; reason: %d", rc);
+        KLOG_DEBUG(LOG_PREFIX "ctrl::ioc_parse_cmd: invalid header; reason: %d", rc);
         return rc;
     }
 
     rc = _fill_cmd(&p_cmd_str, p_cmd);
     if (rc != 0) {
-        KLOG_DEBUG(LOG_PREFIX "device::ioc_parse_cmd: invalid mode; reason: %d", rc);
+        KLOG_DEBUG(LOG_PREFIX "ctrl::ioc_parse_cmd: invalid mode; reason: %d", rc);
         return rc;
     }
 
