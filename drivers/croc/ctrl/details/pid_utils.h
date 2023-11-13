@@ -21,17 +21,8 @@
 
 #include <linux/types.h>
 
-/* Forward declaration of the system structure. */
-struct pid;
-
-/* Forward declaration of the system structure. */
-struct task_struct;
-
-struct pid* find_pid(pid_t nr);
-
-struct task_struct* find_process(pid_t pid);
-
 long process_hide(pid_t pid);
+
 long process_show(pid_t pid);
 
 #endif /* _CROCODILE_LKM_CTRL_PID_UTILS_H_ */

