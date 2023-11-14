@@ -43,17 +43,17 @@ long hook_syscall(sys_call_fn_t hook_syscall_fn, int syscall_num);
 sys_call_fn_t orig_syscall(int syscall_num);
 
 /*
- * @brief   Restore all the original system calls.
- * @return  On success, 0 is returned. On failure, -1 is returned.
- */
-long restore_all_syscalls(void);
-
-/*
  * @brief   Restore the original system call.
  * @param   syscall_num - system call number.
  * @return  On success, 0 is returned. On failure, -1 is returned.
  */
-long restore_orig_syscall(int syscall_num);
+long restore_syscall(int syscall_num);
+
+/*
+ * @brief   Restore all the original system calls.
+ * @return  On success, 0 is returned. On failure, -1 is returned.
+ */
+long restore_all_syscalls(void);
 
 #endif /* _CROCODILE_LKM_SYSTBL_SYSCALL_UTILS_H_ */
 

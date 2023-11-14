@@ -18,9 +18,9 @@
 
 #include <linux/syscalls.h>
 
-#include "systbl/syscall_utils.h"
 #include "systbl/details/find_table.h"
 #include "systbl/details/memory_protection.h"
+#include "systbl/details/syscall_utils.h"
 
 /* System call table pointer. */
 static sys_call_table_t* _p_sys_call_table = NULL;
@@ -105,6 +105,20 @@ sys_call_fn_t orig_syscall(int syscall_num)
     }
 
     return (sys_call_fn_t)_p_sys_call_table[syscall_num];
+}
+
+long restore_all_syscalls(void)
+{
+    if (! _p_sys_call_table) {
+        return -1;
+    }
+
+    for (int i = 0; i < NR_syscalls; ++i) {
+        if (_orig_syscall_table[i]) {
+            UNSAFE_CALL(_p_sys_call_table[i] = (unsigned long)_orig_syscall_table[i]);
+        }
+    }
+    return 0;
 }
 
 /*
