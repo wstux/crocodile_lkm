@@ -12,6 +12,12 @@ endif
 .PHONY: all
 all: release/all
 
+.PHONY: clean
+clean: release/clean
+
+.PHONY: test
+test: release/test
+
 $(eval $(call rule,debug))
 $(eval $(call rule,release))
 

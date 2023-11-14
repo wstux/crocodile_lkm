@@ -16,21 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_PROC_PROC_H_
-#define _CROCODILE_LKM_PROC_PROC_H_
+#ifndef _CROCODILE_LKM_CTRL_HASH_TBL_H_
+#define _CROCODILE_LKM_CTRL_HASH_TBL_H_
 
-/* Forward declaration of the system structure. */
-struct pid;
+#include "types.h"
 
-/* Forward declaration of the system structure. */
-struct task_struct;
+size_t hash_tbl_capacity(void);
 
-struct pid* find_pid(pid_t nr);
+int hash_tbl_erase(hash_table_t* p_tbl, pid_t pid);
 
-struct task_struct* find_process(pid_t pid);
+hash_node_t* hash_tbl_find(hash_table_t* p_tbl, pid_t pid);
 
-long process_hide(pid_t pid);
-long process_show(pid_t pid);
+void hash_tbl_init(hash_table_t* p_tbl);
 
-#endif /* _CROCODILE_LKM_PROC_PROC_H_ */
+int hash_tbl_insert(hash_table_t* p_tbl, pid_t pid);
+
+int hash_tbl_is_contains(hash_table_t* p_tbl, pid_t pid);
+
+#endif /* _CROCODILE_LKM_DEVICE_HASH_TBL_H_ */
 

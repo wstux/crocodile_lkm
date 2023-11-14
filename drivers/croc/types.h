@@ -19,6 +19,8 @@
 #ifndef _CROCODILE_LKM_TYPES_H_
 #define _CROCODILE_LKM_TYPES_H_
 
+#include <linux/cdev.h>
+#include <linux/hashtable.h>
 #include <linux/linkage.h>
 #include <linux/mutex.h>
 #include <linux/types.h>
@@ -27,7 +29,36 @@
  *  Common types.
  ******************************************************************************/
 
-typedef int                 rc_t;
+/******************************************************************************
+ *  Device types.
+ ******************************************************************************/
+
+#define HASH_TBL_BITS       8
+
+/**/
+struct hash_node
+{
+    struct hlist_node node;
+};
+typedef struct hash_node    hash_node_t;
+
+/**/
+struct hash_table
+{
+    size_t              size;
+    DECLARE_HASHTABLE(tbl, HASH_TBL_BITS);
+};
+typedef struct hash_table   hash_table_t;
+
+/**/
+struct module_dev
+{
+    struct mutex    lock;   /* mutual exclusion semaphore   */
+    struct cdev     cdev;   /* char device structure        */
+
+    hash_table_t    hash_tbl;
+};
+typedef struct module_dev   module_dev_t;
 
 /******************************************************************************
  *  System table types.

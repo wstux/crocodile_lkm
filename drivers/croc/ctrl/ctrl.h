@@ -16,12 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_DEVICE_PARSER_H_
-#define _CROCODILE_LKM_DEVICE_PARSER_H_
+#ifndef _CROCODILE_LKM_CTRL_CTRL_H_
+#define _CROCODILE_LKM_CTRL_CTRL_H_
 
-#include "device/types.h"
+#include "ctrl/ioctl.h"
+#include "ctrl/details/hash_tbl.h"
+#include "ctrl/details/ioctl_module.h"
+#include "ctrl/details/ioctl_proc.h"
+#include "ctrl/details/parser_str_cmd.h"
+#include "ctrl/details/pid_utils.h"
 
-int parse_cmd(char* p_cmd_str, size_t count, unsigned int* p_cmd, unsigned long* p_arg);
-
-#endif /* _CROCODILE_LKM_DEVICE_PARSER_H_ */
+#endif /* _CROCODILE_LKM_CTRL_CTRL_H_ */
 

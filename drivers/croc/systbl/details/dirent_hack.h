@@ -16,19 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_PROC_MODULE_HIDE_H_
-#define _CROCODILE_LKM_PROC_MODULE_HIDE_H_
+#ifndef _CROCODILE_LKM_SYSTBL_DIRENT_HACK_H_
+#define _CROCODILE_LKM_SYSTBL_DIRENT_HACK_H_
 
-/*
- * @todo    Implement restore and remove the LKM from sysfs.
- *          https://stackoverflow.com/questions/46502395/restore-or-remove-the-linux-kernel-module-from-sysfs
- */
+struct linux_dirent
+{
+    unsigned long d_ino;
+    unsigned long d_off;
+    unsigned short d_reclen;
+    char d_name[1];
+};
 
-int is_module_hidden(void);
-
-void module_hide(void);
-
-void module_show(void);
-
-#endif /* _CROCODILE_LKM_PROC_MODULE_HIDE_H_ */
+#endif /* _CROCODILE_LKM_SYSTBL_DIRENT_HACK_H_ */
 

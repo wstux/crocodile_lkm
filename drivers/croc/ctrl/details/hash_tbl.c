@@ -19,7 +19,7 @@
 #include <linux/hashtable.h>
 #include <linux/slab.h>
 
-#include "device/details/hash_tbl.h"
+#include "ctrl/details/hash_tbl.h"
 
 size_t hash_tbl_capacity(void)
 {

