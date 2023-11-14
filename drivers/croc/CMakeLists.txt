@@ -10,6 +10,8 @@ DriverTarget(croc
         device/details/device.c
         device/details/file_ops.c
         logging/details/severity_level_impl.c
+        proc/details/file_ops.c
+        proc/details/proc.c
         systbl/details/find_table.c
         systbl/details/hacked_funcs.c
         systbl/details/syscall_utils.c

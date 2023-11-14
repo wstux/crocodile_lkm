@@ -16,42 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <linux/atomic.h>
+#include <linux/proc_fs.h>
+#include <linux/seq_file.h>
 
-#include "logging/severity_level.h"
-#include "logging/details/severity_level_impl.h"
+#include "logging.h"
+#include "proc/details/file_ops.h"
 
-#define _LVL_COUNT  LVL_DEBUG + 1
-
-/* Default severity level. */
-static atomic_t _severity_level = ATOMIC_INIT(LVL_WARN); 
-
-int _can_log(int lvl)
+int proc_open_mem(struct inode* /*p_inode*/, struct file* p_file)
 {
-    return (lvl <= atomic_read(&_severity_level));
+    return single_open(p_file, proc_read_mem, NULL);
 }
 
-int _get_log_level(void)
+int proc_read_mem(struct seq_file* p_file, void* p_data)
 {
-    return atomic_read(&_severity_level);
-}
-
-int _init_logger(int lvl)
-{
-    if ((lvl < 0) || (lvl > _LVL_COUNT)) {
-        return -1;
-    }
-    atomic_set(&_severity_level, lvl);
+    const int size = p_file->size - 80;
+    seq_printf(p_file,"\nLog level: qset %i\n", GET_LOGF_LEVEL());
     return 0;
 }
-
-void _set_log_level(int lvl)
-{
-    if ((lvl < 0) || (lvl > _LVL_COUNT)) {
-        return;
-    }
-    atomic_set(&_severity_level, lvl);
-}
-
-#undef _LVL_COUNT
 

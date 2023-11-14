@@ -16,42 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <linux/atomic.h>
+#ifndef _CROCODILE_LKM_PROC_PROC_H_
+#define _CROCODILE_LKM_PROC_PROC_H_
 
-#include "logging/severity_level.h"
-#include "logging/details/severity_level_impl.h"
+void deregister_proc(void);
 
-#define _LVL_COUNT  LVL_DEBUG + 1
+void register_proc(void);
 
-/* Default severity level. */
-static atomic_t _severity_level = ATOMIC_INIT(LVL_WARN); 
-
-int _can_log(int lvl)
-{
-    return (lvl <= atomic_read(&_severity_level));
-}
-
-int _get_log_level(void)
-{
-    return atomic_read(&_severity_level);
-}
-
-int _init_logger(int lvl)
-{
-    if ((lvl < 0) || (lvl > _LVL_COUNT)) {
-        return -1;
-    }
-    atomic_set(&_severity_level, lvl);
-    return 0;
-}
-
-void _set_log_level(int lvl)
-{
-    if ((lvl < 0) || (lvl > _LVL_COUNT)) {
-        return;
-    }
-    atomic_set(&_severity_level, lvl);
-}
-
-#undef _LVL_COUNT
+#endif /* _CROCODILE_LKM_PROC_PROC_H_ */
 

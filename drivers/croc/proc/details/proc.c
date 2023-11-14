@@ -16,42 +16,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <linux/atomic.h>
+#include <linux/proc_fs.h>
+#include <linux/seq_file.h>
 
-#include "logging/severity_level.h"
-#include "logging/details/severity_level_impl.h"
+#include "logging.h"
+#include "proc/proc.h"
+#include "proc/details/file_ops.h"
 
-#define _LVL_COUNT  LVL_DEBUG + 1
+static struct proc_ops mem_proc_fops = {
+	.proc_open    = proc_open_mem,
+	.proc_read    = seq_read,
+	.proc_lseek   = seq_lseek,
+	.proc_release = single_release
+};
 
-/* Default severity level. */
-static atomic_t _severity_level = ATOMIC_INIT(LVL_WARN); 
-
-int _can_log(int lvl)
+void deregister_proc(void)
 {
-    return (lvl <= atomic_read(&_severity_level));
+	remove_proc_entry("log_lvl", NULL /* parent dir */);
 }
 
-int _get_log_level(void)
+void register_proc(void)
 {
-    return atomic_read(&_severity_level);
+	proc_create_data("log_lvl",
+	                 0 /* default mode */,
+			         NULL /* parent dir */, 
+			         &mem_proc_fops,
+			         NULL /* client data */);
 }
-
-int _init_logger(int lvl)
-{
-    if ((lvl < 0) || (lvl > _LVL_COUNT)) {
-        return -1;
-    }
-    atomic_set(&_severity_level, lvl);
-    return 0;
-}
-
-void _set_log_level(int lvl)
-{
-    if ((lvl < 0) || (lvl > _LVL_COUNT)) {
-        return;
-    }
-    atomic_set(&_severity_level, lvl);
-}
-
-#undef _LVL_COUNT
 
