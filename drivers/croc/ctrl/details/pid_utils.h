@@ -21,6 +21,8 @@
 
 #include <linux/types.h>
 
+int is_process_hidden(pid_t pid);
+
 long process_hide(pid_t pid);
 
 long process_show(pid_t pid);

