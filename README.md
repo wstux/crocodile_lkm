@@ -25,9 +25,14 @@ rmmod croc
 
 ```
 cat > /dev/croc << EOF
-IOC_PID_HIGH_<pid>
+IOC_PID_HIDE_<pid>
 EOF
 ```
+
+Supported commands:
+* `IOC_PID_HIDE_<pid>`
+* `IOC_PID_SHOW_<pid>`
+* `IOC_LOG_<log_level>`
 
 ## References
 1. [Wikipedia Rootkit](https://en.wikipedia.org/wiki/Rootkit)
