@@ -30,7 +30,7 @@ int proc_open_mem(struct inode* /*p_inode*/, struct file* p_file)
 int proc_read_mem(struct seq_file* p_file, void* p_data)
 {
     const int size = p_file->size - 80;
-    seq_printf(p_file,"\nLog level: qset %i\n", GET_LOGF_LEVEL());
+    seq_printf(p_file,"Log level: %i\n", GET_LOGF_LEVEL());
     return 0;
 }
 
