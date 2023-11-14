@@ -24,7 +24,7 @@
 
 #include "logging.h"
 #include "ctrl/ctrl.h"
-#include "systbl/hook_funcs.h"
+#include "systbl/hooked_funcs.h"
 #include "systbl/syscall_utils.h"
 #include "systbl/details/dirent_hack.h"
 

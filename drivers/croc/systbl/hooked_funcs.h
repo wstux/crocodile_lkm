@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_
-#define _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_
+#ifndef _CROCODILE_LKM_SYSTBL_HOOKED_FUNCS_H_
+#define _CROCODILE_LKM_SYSTBL_HOOKED_FUNCS_H_
 
 #include "types.h"
 
@@ -27,5 +27,5 @@ asmlinkage long hacked_getdents(const struct pt_regs* p_regs);
 
 asmlinkage long hacked_getdents64(const struct pt_regs* p_regs);
 
-#endif /* _CROCODILE_LKM_SYSTBL_HOOK_FUNCS_H_ */
+#endif /* _CROCODILE_LKM_SYSTBL_HOOKED_FUNCS_H_ */
 
