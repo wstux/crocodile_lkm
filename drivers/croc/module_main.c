@@ -24,6 +24,7 @@
 #include "logging.h"
 #include "version.h"
 #include "device/device.h"
+#include "proc/proc.h"
 #include "systbl/systbl.h"
 
 /*
@@ -37,6 +38,7 @@ static void __exit cleanup_module_hsyst(void)
 
     deregister_device();
     restore_all_syscalls();
+    deregister_proc();
 }
 
 /*
@@ -68,6 +70,8 @@ static int __init init_module_hsyst(void)
         restore_all_syscalls();
         return -1;
     }
+
+    register_proc();
 
     return rc;
 }
