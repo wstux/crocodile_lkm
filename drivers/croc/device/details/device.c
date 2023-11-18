@@ -44,9 +44,7 @@ static struct file_operations device_fops = {
 
 int deregister_device(void)
 {
-    dev_t devno;
-
-    devno = MKDEV(device_major, device_minor);
+    dev_t devno = MKDEV(device_major, device_minor);
     /* Get rid of our char dev entries */
     if (devices_tbl != NULL) {
         for (int i = 0; i < device_nr_devs; ++i) {
@@ -59,7 +57,7 @@ int deregister_device(void)
     /* cleanup_module is never called if registering failed */
     unregister_chrdev_region(devno, device_nr_devs);
 
-    return -1;
+    return 0;
 }
 
 int register_device(void)
