@@ -20,7 +20,7 @@
 #include <linux/module.h>
 
 #include "logging.h"
-#include "ctrl/details/hash_tbl.h"
+#include "ctrl/ctrl.h"
 #include "device/device.h"
 #include "device/params.h"
 #include "device/details/cdev_utils.h"

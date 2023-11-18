@@ -46,6 +46,21 @@ int ioc_hide_proc(module_dev_t* p_dev, pid_t pid)
     return rc;
 }
 
+int ioc_reset(module_dev_t* p_dev)
+{
+    hash_node_t* p_cur = NULL;
+    unsigned bkt;
+
+    if (mutex_lock_interruptible(&p_dev->lock)) {
+        return -ERESTARTSYS;
+    }
+    hash_for_each(p_dev->hash_tbl.tbl, bkt, p_cur, node) {
+        process_show(p_cur->pid);
+    }
+    mutex_unlock(&p_dev->lock);
+    return 0;
+}
+
 int ioc_show_proc(module_dev_t* p_dev, pid_t pid)
 {
     int rc = 0;

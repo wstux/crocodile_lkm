@@ -17,6 +17,7 @@
  */
 
 #include "logging.h"
+#include "ctrl/ctrl.h"
 #include "device/details/cdev_utils.h"
 
 void cdev_setup(module_dev_t* p_dev, int major, int minor, int idx, 
@@ -37,7 +38,7 @@ void cdev_setup(module_dev_t* p_dev, int major, int minor, int idx,
 
 int cdev_trim(module_dev_t* p_dev)
 {
-    /* Do nothing now. */
+    ioc_reset(p_dev);
     return 0;
 }
 
