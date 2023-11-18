@@ -19,6 +19,11 @@
 #ifndef _CROCODILE_LKM_DEVICE_DEVICE_H_
 #define _CROCODILE_LKM_DEVICE_DEVICE_H_
 
+#include "types.h"
+
+extern int           device_nr_devs;
+extern module_dev_t* devices_tbl;
+
 int deregister_device(void);
 
 int register_device(void);

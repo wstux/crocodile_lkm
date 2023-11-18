@@ -28,9 +28,9 @@
 
 static int device_major     = DEVICE_MAJOR_DFL;
 static int device_minor     = DEVICE_MINOR_DFL;
-static int device_nr_devs   = DEVICE_NR_DEVS_DFL;
+int device_nr_devs          = DEVICE_NR_DEVS_DFL;
 
-static module_dev_t* devices_tbl = NULL;    /* allocated in register_device */
+module_dev_t* devices_tbl   = NULL;    /* allocated in register_device */
 
 static struct file_operations device_fops = {
 	.owner          = THIS_MODULE,
