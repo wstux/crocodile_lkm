@@ -38,6 +38,7 @@
 /**/
 struct hash_node
 {
+    pid_t pid;
     struct hlist_node node;
 };
 typedef struct hash_node    hash_node_t;

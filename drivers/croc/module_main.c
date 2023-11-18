@@ -24,12 +24,13 @@
 #include "logging.h"
 #include "version.h"
 #include "device/device.h"
+#include "proc/proc.h"
 #include "systbl/systbl.h"
 
 /*
  * @brief   Module cleanup.
  */
-static void __exit cleanup_module_hsyst(void)
+static void __exit main_module_exit(void)
 {
     int rc = 0;
 
@@ -37,12 +38,13 @@ static void __exit cleanup_module_hsyst(void)
 
     deregister_device();
     restore_all_syscalls();
+    deregister_proc();
 }
 
 /*
  * @brief   Module initialization.
  */
-static int __init init_module_hsyst(void)
+static int __init main_module_init(void)
 {
     int rc = 0;
 
@@ -69,11 +71,13 @@ static int __init init_module_hsyst(void)
         return -1;
     }
 
+    register_proc();
+
     return rc;
 }
 
-module_init(init_module_hsyst);
-module_exit(cleanup_module_hsyst);
+module_init(main_module_init);
+module_exit(main_module_exit);
 
 MODULE_LICENSE("Dual BSD/GPL");
 MODULE_AUTHOR("Chistyakov Alexander");

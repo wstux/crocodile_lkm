@@ -20,7 +20,7 @@
 #include <linux/module.h>
 
 #include "logging.h"
-#include "ctrl/details/hash_tbl.h"
+#include "ctrl/ctrl.h"
 #include "device/device.h"
 #include "device/params.h"
 #include "device/details/cdev_utils.h"
@@ -28,9 +28,9 @@
 
 static int device_major     = DEVICE_MAJOR_DFL;
 static int device_minor     = DEVICE_MINOR_DFL;
-static int device_nr_devs   = DEVICE_NR_DEVS_DFL;
+int device_nr_devs          = DEVICE_NR_DEVS_DFL;
 
-static module_dev_t* devices_tbl = NULL;    /* allocated in register_device */
+module_dev_t* devices_tbl   = NULL;    /* allocated in register_device */
 
 static struct file_operations device_fops = {
 	.owner          = THIS_MODULE,
@@ -44,12 +44,12 @@ static struct file_operations device_fops = {
 
 int deregister_device(void)
 {
-    dev_t devno;
-
-    devno = MKDEV(device_major, device_minor);
+    dev_t devno = MKDEV(device_major, device_minor);
     /* Get rid of our char dev entries */
     if (devices_tbl != NULL) {
         for (int i = 0; i < device_nr_devs; ++i) {
+            ioc_reset(devices_tbl + i);
+
             cdev_trim(devices_tbl + i);
             cdev_del(&devices_tbl[i].cdev);
         }
@@ -59,7 +59,7 @@ int deregister_device(void)
     /* cleanup_module is never called if registering failed */
     unregister_chrdev_region(devno, device_nr_devs);
 
-    return -1;
+    return 0;
 }
 
 int register_device(void)

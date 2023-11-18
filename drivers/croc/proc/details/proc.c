@@ -16,12 +16,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CROCODILE_LKM_CTRL_PARSER_STR_CMD_H_
-#define _CROCODILE_LKM_CTRL_PARSER_STR_CMD_H_
+#include <linux/proc_fs.h>
+#include <linux/seq_file.h>
 
-#include <linux/types.h>
+#include "logging.h"
+#include "proc/proc.h"
+#include "proc/details/file_ops.h"
 
-int parse_str_cmd(char* p_cmd_str, size_t count, unsigned int* p_cmd, unsigned long* p_arg);
+static struct proc_ops mem_proc_fops = {
+	.proc_open    = proc_open_mem,
+	.proc_read    = seq_read,
+	.proc_lseek   = seq_lseek,
+	.proc_release = single_release
+};
 
-#endif /* _CROCODILE_LKM_CTRL_PARSER_STR_CMD_H_ */
+void deregister_proc(void)
+{
+	remove_proc_entry("croc", NULL /* parent dir */);
+}
+
+void register_proc(void)
+{
+	proc_create_data("croc",
+	                 0 /* default mode */,
+			         NULL /* parent dir */, 
+			         &mem_proc_fops,
+			         NULL /* client data */);
+}
 

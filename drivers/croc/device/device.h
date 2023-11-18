@@ -21,6 +21,9 @@
 
 #include "types.h"
 
+extern int           device_nr_devs;
+extern module_dev_t* devices_tbl;
+
 int deregister_device(void);
 
 int register_device(void);
