@@ -32,12 +32,12 @@ static struct proc_ops mem_proc_fops = {
 
 void deregister_proc(void)
 {
-	remove_proc_entry("log_lvl", NULL /* parent dir */);
+	remove_proc_entry("croc", NULL /* parent dir */);
 }
 
 void register_proc(void)
 {
-	proc_create_data("log_lvl",
+	proc_create_data("croc",
 	                 0 /* default mode */,
 			         NULL /* parent dir */, 
 			         &mem_proc_fops,
