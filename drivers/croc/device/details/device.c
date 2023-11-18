@@ -48,6 +48,8 @@ int deregister_device(void)
     /* Get rid of our char dev entries */
     if (devices_tbl != NULL) {
         for (int i = 0; i < device_nr_devs; ++i) {
+            ioc_reset(devices_tbl + i);
+
             cdev_trim(devices_tbl + i);
             cdev_del(&devices_tbl[i].cdev);
         }
