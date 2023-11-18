@@ -25,6 +25,7 @@
 #include "ctrl/ctrl.h"
 #include "device/details/cdev_utils.h"
 #include "device/details/file_ops.h"
+#include "device/details/parser_str_cmd.h"
 
 long dev_ioctl(struct file* p_file, unsigned int cmd, unsigned long arg)
 {

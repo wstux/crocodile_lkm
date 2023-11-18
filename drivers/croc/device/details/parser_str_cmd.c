@@ -20,7 +20,7 @@
 
 #include "logging.h"
 #include "ctrl/ioctl.h"
-#include "ctrl/details/parser_str_cmd.h"
+#include "device/details/parser_str_cmd.h"
 
 /******************************************************************************
  *  Private functions.
