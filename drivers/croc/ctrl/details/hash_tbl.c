@@ -74,6 +74,7 @@ int hash_tbl_insert(hash_table_t* p_tbl, pid_t pid)
     }
 
     p_node = kmalloc(sizeof(hash_node_t), GFP_KERNEL);
+    p_node->pid = pid;
     hash_add(p_tbl->tbl, &p_node->node, pid);
     ++p_tbl->size;
     return 0;
