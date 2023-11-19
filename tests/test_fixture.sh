@@ -86,6 +86,19 @@ function unload_device
 # Tests interface                                                        #
 ##########################################################################
 
+function expect_false
+{
+    local prefix="$1"
+    local arg1="$2"
+
+    if [[ "${!arg1}" == "false" || "${!arg1}" == "0" ]]; then
+        echo "[ OK ] ${prefix}"
+    else
+        __tests_rc=1
+        echo "[FAIL] ${prefix}: ${arg1} ('${!arg1}') is true; expected false"
+    fi
+}
+
 function expect_qe
 {
     local prefix="$1"
@@ -97,6 +110,19 @@ function expect_qe
     else
         __tests_rc=1
         echo "[FAIL] ${prefix}: ${arg1} ('${!arg1}') != ${arg2} ('${!arg2}')"
+    fi
+}
+
+function expect_true
+{
+    local prefix="$1"
+    local arg1="$2"
+
+    if [[ "${!arg1}" == "true" || "${!arg1}" == "1" ]]; then
+        echo "[ OK ] ${prefix}"
+    else
+        __tests_rc=1
+        echo "[FAIL] ${prefix}: ${arg1} ('${!arg1}') is false; expected true"
     fi
 }
 
