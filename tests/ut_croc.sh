@@ -33,6 +33,21 @@ function read_log_level
     echo "${lvl}"
 }
 
+#function t
+#{
+#    local v="$1"
+#    echo "v = ${v}"
+#    echo "!v = ${!v}"
+#}
+#value="Hello World";
+#t value
+
+#function run_process
+#{
+#    watch ls -l &
+#    echo "$!" # pid
+#}
+
 ##########################################################################
 # Public functions                                                       #
 ##########################################################################
@@ -41,7 +56,7 @@ function croc__proc_fs
 {
     local proc_fs_file="/proc/$( get_device_name )"
 
-    local etalon="Log level: 4
+    local etalon="Log level: 6
 Count of hidden processes: 0
 There are not hidden processes"
 
@@ -58,7 +73,7 @@ There are not hidden processes"
 
 function croc__log_level
 {
-    local etalon="4"
+    local etalon="6"
 
     load_device
 

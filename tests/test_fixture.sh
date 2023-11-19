@@ -6,6 +6,8 @@
 
 __device_name="croc"
 __device="/dev/${__device_name}"
+__repository_root_dir="$( realpath "$( dirname "$( realpath "$0" )" )/.." )"
+__loader_script="${__repository_root_dir}/croc_load.sh"
 
 ##########################################################################
 # Logging                                                                #
@@ -44,7 +46,7 @@ function log_error { log "ERROR" "$1"; }
 
 function get_device { echo "${__device}"; }
 function get_device_name { echo "${__device_name}"; }
-function get_repository_root_dir { echo "$( realpath "$( dirname "$( realpath "$0" )" )/.." )"; }
+function get_repository_root_dir { echo "${__repository_root_dir}"; }
 
 ##########################################################################
 # Constructor                                                            #
@@ -52,10 +54,11 @@ function get_repository_root_dir { echo "$( realpath "$( dirname "$( realpath "$
 
 function load_device
 {
-    local loader_path="$( get_repository_root_dir )/drivers/lkm_load.sh"
+    local loader_path="${__loader_script}"
 
-    local rc="$( sudo /bin/bash "${loader_path}" --lkm "${DEVICE_NAME}" -l --loglevel "$( log_level )" )"
-    if [[ "$rc" -ne "0" ]]; then
+    sudo /bin/bash "${loader_path}" -l --loglevel "$( log_level )"
+    local rc="$?"
+    if [[ "$rc" != "0" ]]; then
         log_error "Failed to load device '"${DEVICE_NAME}"'"
         exit 1
     fi
@@ -67,10 +70,11 @@ function load_device
 
 function unload_device
 {
-    local loader_path="$( get_repository_root_dir )/drivers/lkm_load.sh"
+    local loader_path="${__loader_script}"
 
-    local rc="$( sudo /bin/bash "${loader_path}" --lkm "${DEVICE_NAME}" -u --loglevel "$( log_level )" )"
-    if [[ "$rc" -ne "0" ]]; then
+    sudo /bin/bash "${loader_path}" -u --loglevel "$( log_level )"
+    local rc="$?"
+    if [[ "$rc" != "0" ]]; then
         log_error "Failed to unload device '"${DEVICE_NAME}"'"
         exit 1
     fi
