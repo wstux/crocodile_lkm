@@ -9,6 +9,8 @@ __device="/dev/${__device_name}"
 __repository_root_dir="$( realpath "$( dirname "$( realpath "$0" )" )/.." )"
 __loader_script="${__repository_root_dir}/croc_load.sh"
 
+__tests_rc=0
+
 ##########################################################################
 # Logging                                                                #
 ##########################################################################
@@ -93,7 +95,10 @@ function expect_qe
     if [[ "${!arg1}" == "${!arg2}" ]]; then
         echo "[ OK ] ${prefix}"
     else
+        __tests_rc=1
         echo "[FAIL] ${prefix}: ${arg1} ('${!arg1}') != ${arg2} ('${!arg2}')"
     fi
 }
+
+function rc { echo "${__tests_rc}"; }
 

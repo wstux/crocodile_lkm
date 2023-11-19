@@ -105,3 +105,5 @@ function croc__log_level
 croc__proc_fs
 croc__log_level
 
+exit $( rc )
+
