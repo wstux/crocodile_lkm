@@ -45,7 +45,11 @@ int proc_read_mem(struct seq_file* p_file, void* p_data)
 
         seq_printf(p_file,"Log level: %i\n", GET_LOGF_LEVEL());
         seq_printf(p_file,"Count of hidden processes: %lu\n", p_dev->hash_tbl.size);
-        seq_printf(p_file,"Hidden pids:\n");
+        if (p_dev->hash_tbl.size > 0) {
+            seq_printf(p_file,"Hidden pids:\n");
+        } else {
+            seq_printf(p_file,"There are not hidden processes\n");
+        }
 
         hash_for_each(p_dev->hash_tbl.tbl, bkt, p_cur, node) {
             if (p_file->count > limit) {
