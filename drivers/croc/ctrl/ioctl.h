@@ -26,7 +26,7 @@
 /* Use 'k' as magic number */
 #define CROC_IOC_MAGIC          'k'
 
-#define CROC_IOC_MAX_NR         1
+#define CROC_IOC_MAX_NR         16
 
 #define CROC_IOC_HIDE_CMD       0b00001
 #define CROC_IOC_SHOW_CMD       0b00010
