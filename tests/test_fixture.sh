@@ -4,10 +4,10 @@
 # Variables declaration                                                  #
 ##########################################################################
 
-__device_name="croc"
+__device_name="crok"
 __device="/dev/${__device_name}"
 __repository_root_dir="$( realpath "$( dirname "$( realpath "$0" )" )/.." )"
-__loader_script="${__repository_root_dir}/croc_load.sh"
+__loader_script="${__repository_root_dir}/install/lkm_load.sh"
 
 __tests_rc=0
 
