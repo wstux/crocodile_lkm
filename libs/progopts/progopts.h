@@ -36,15 +36,47 @@ namespace po {
 
 class prog_opts final
 {
-    using value_t = std::variant<bool, int, double, std::string>;
-    using value_ptr_t = std::shared_ptr<value_t>;
-    using cvt_t = std::function<bool(value_t&, const char*)>;
+public:
+    const std::string& error_msg() const { return m_error_msg; }
 
-    template<typename> static inline constexpr bool false_v = false;
+    bool has_error() const { return (! m_error_msg.empty()); }
 
+    bool has_value(const std::string& po) const;
+
+    template<typename TType>
+    bool insert(const std::string& po, const std::string& descr)
+    {
+        arg::ptr a = std::make_shared<arg>(po, descr, (TType*)nullptr);
+        return insert_impl(a);
+    }
+
+    template<typename TType>
+    bool insert(const std::string& po, const TType& def_value, const std::string& descr)
+    {
+        arg::ptr a = std::make_shared<arg>(po, descr, &def_value);
+        return insert_impl(a);
+    }
+
+    bool parse(const int argc, char const* const* argv);
+
+    template<typename TType>
+    const TType& value(const std::string& po) const
+    {
+        const arg::ptr& a = m_tokens.at(po);
+        return std::get<TType>(*(a->p_value));
+    }
+
+    std::string usage() const;
+
+private:
     struct arg final
     {
         using ptr = std::shared_ptr<arg>;
+        using value_t = std::variant<bool, int, double, std::string>;
+        using value_ptr_t = std::shared_ptr<value_t>;
+        using cvt_t = std::function<bool(value_t&, const char*)>;
+
+        template<typename> static inline constexpr bool false_v = false;
 
         arg() {}
 
@@ -121,38 +153,6 @@ class prog_opts final
 
     using args_list_t = std::vector<arg::ptr>;
     using tokens_list_t = std::unordered_map<std::string_view, arg::ptr>;
-
-public:
-    const std::string& error_msg() const { return m_error_msg; }
-
-    bool has_error() const { return (! m_error_msg.empty()); }
-
-    bool has_value(const std::string& po) const;
-
-    template<typename TType>
-    bool insert(const std::string& po, const std::string& descr)
-    {
-        arg::ptr a = std::make_shared<arg>(po, descr, (TType*)nullptr);
-        return insert_impl(a);
-    }
-
-    template<typename TType>
-    bool insert(const std::string& po, const TType& def_value, const std::string& descr)
-    {
-        arg::ptr a = std::make_shared<arg>(po, descr, &def_value);
-        return insert_impl(a);
-    }
-
-    bool parse(const int argc, char const* const* argv);
-
-    template<typename TType>
-    const TType& value(const std::string& po) const
-    {
-        const arg::ptr& a = m_tokens.at(po);
-        return std::get<TType>(*(a->p_value));
-    }
-
-    std::string usage() const;
 
 private:
     bool has_key(const std::string& po) const;
