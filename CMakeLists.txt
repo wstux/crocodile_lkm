@@ -23,4 +23,5 @@ include(${COMMON_MAIN_CMAKE} PUBLIC)
 ################################################################################
 
 add_subdirectory(drivers/croc)
+add_subdirectory(tests)
 
