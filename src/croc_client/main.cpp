@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
     if (po.value<bool>("--hide") && po.has_value("--pid")) {
         cmd = CROC_IOC_HIDE_PID;
         arg = po.value<int>("--pid");
-    } if (po.value<bool>("--show") && po.has_value("--pid")) {
+    } else if (po.value<bool>("--show") && po.has_value("--pid")) {
         cmd = CROC_IOC_SHOW_PID;
         arg = po.value<int>("--pid");
     } else {
@@ -71,13 +71,13 @@ int main(int argc, char* argv[])
 
     const int fd = ::open(DEVICE_PATH, O_RDWR);
     if (fd == -1) {
-        std::cerr << "Could not open " DEVICE_PATH ". Reason: '"
-                  << ::strerror(errno) << "'." << std::endl;
+        std::cerr << "Could not open '" DEVICE_PATH "'. Reason: '" << ::strerror(errno) << "'." << std::endl;
         return EXIT_FAILURE;
     }
 
     int rc = EXIT_SUCCESS;
     if (::ioctl(fd, cmd, arg) < 0) {
+        std::cerr << "Failed to perform command. Reason: '" << ::strerror(errno) << "'." << std::endl;
         rc = EXIT_FAILURE;
     }
     ::close(fd);
