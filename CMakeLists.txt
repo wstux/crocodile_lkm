@@ -6,7 +6,7 @@ cmake_minimum_required (VERSION 3.10)
 
 project(crocodile_lkm
         VERSION 0.0.1
-        LANGUAGES C)
+        LANGUAGES CXX)
 
 ################################################################################
 # Init cmake modules path
@@ -22,6 +22,8 @@ include(${COMMON_MAIN_CMAKE} PUBLIC)
 # Include source code
 ################################################################################
 
+add_subdirectory(libs/progopts)
 add_subdirectory(drivers/croc)
+add_subdirectory(src/croc_client)
 add_subdirectory(tests)
 
