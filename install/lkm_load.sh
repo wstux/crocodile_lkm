@@ -7,7 +7,7 @@ set -e
 # Variables declaration                                                  #
 ##########################################################################
 
-DEVICE="croc"
+DEVICE="crok"
 
 ##########################################################################
 # Logging                                                                #
@@ -45,7 +45,7 @@ function log_error { log "ERROR" "$1"; }
 ##########################################################################
 
 function dest_device { echo "/dev/${DEVICE}"; }
-function get_repository_root_dir { echo "$( realpath "$( dirname "$( realpath "$0" )" )" )"; }
+function get_repository_root_dir { echo "$( realpath "$( dirname "$( realpath "$0" )" )" )/.."; }
 function major_version { echo "$( awk "\$2==\"$DEVICE\" {print \$1}" /proc/devices )"; }
 function module_source_dir { echo "$( get_repository_root_dir )/build_release/drivers/${DEVICE}"; }
 function module_source_file { echo "$( module_source_dir )/${DEVICE}.ko"; }
@@ -115,7 +115,7 @@ function unload_device
 
 function usage
 {
-    echo "Usage: $0 --lkm {device_name} {--load|--unload|--reload}"
+    echo "Usage: $0 {--load|--unload|--reload}"
     echo ""
     echo "Commands:"
     echo "  -l|--load   - load device."
